@@ -1,0 +1,193 @@
+{
+  "version": 3,
+  "arena": {
+    "width": 16,
+    "depth": 9,
+    "environmentWidth": 20.5,
+    "environmentDepth": 13.2
+  },
+  "models": {
+    "crystalShrine": {
+      "label": "Central crystal shrine",
+      "category": "core",
+      "url": "../models/03-garden-crystal-shrine.glb",
+      "targetHeight": 1.42
+    },
+    "portalArch": {
+      "label": "Reusable portal arch",
+      "category": "core",
+      "url": "../models/04-garden-portal-arch.glb",
+      "targetHeight": 1.72
+    },
+    "mainGate": {
+      "label": "Main garden gate",
+      "category": "core",
+      "url": "../models/05-garden-main-gate.glb",
+      "targetHeight": 1.48
+    },
+    "lanternTower": {
+      "label": "Decorative lantern tower",
+      "category": "core",
+      "url": "../models/06-garden-lantern-tower.glb",
+      "targetHeight": 1.24
+    },
+    "emeraldTree": {
+      "label": "Emerald canopy tree",
+      "category": "environment",
+      "url": "../models/07-garden-emerald-canopy-tree.glb",
+      "targetHeight": 2.85
+    },
+    "pinkTree": {
+      "label": "Pink blossom tree",
+      "category": "environment",
+      "url": "../models/08-garden-pink-blossom-tree.glb",
+      "targetHeight": 2.65
+    },
+    "tealTree": {
+      "label": "Teal dome tree",
+      "category": "environment",
+      "url": "../models/09-garden-teal-dome-tree.glb",
+      "targetHeight": 2.45
+    },
+    "gardenPalm": {
+      "label": "Garden palm",
+      "category": "environment",
+      "url": "../models/10-garden-palm.glb",
+      "targetHeight": 2.5
+    },
+    "flowerBush": {
+      "label": "Flower and bush cluster",
+      "category": "environment",
+      "url": "../models/11-garden-flower-bush-cluster.glb",
+      "targetHeight": 0.5
+    },
+    "straightWall": {
+      "label": "Straight garden wall",
+      "category": "environment",
+      "url": "../models/12-garden-straight-wall.glb",
+      "targetHeight": 0.72
+    },
+    "cornerWall": {
+      "label": "Corner garden wall",
+      "category": "environment",
+      "url": "../models/13-garden-corner-wall.glb",
+      "targetHeight": 0.72
+    },
+    "waterway": {
+      "label": "Straight waterway",
+      "category": "environment",
+      "url": "../models/14-garden-straight-waterway.glb",
+      "targetHeight": 0.28
+    },
+    "waterfallCliff": {
+      "label": "Waterfall cliff",
+      "category": "environment",
+      "url": "../models/15-garden-waterfall-cliff.glb",
+      "targetHeight": 1.62
+    }
+  },
+  "instances": [
+    { "id": "crystal-center", "asset": "crystalShrine", "position": [0, 0, 0], "rotationY": 0 },
+    { "id": "portal-left-north", "asset": "portalArch", "team": "cyan", "position": [-7.05, 0, -1.16], "rotationY": 0 },
+    { "id": "portal-left-south", "asset": "portalArch", "team": "cyan", "position": [-7.05, 0, 1.02], "rotationY": 0 },
+    { "id": "portal-right-north", "asset": "portalArch", "team": "purple", "position": [7.05, 0, -1.16], "rotationY": 180 },
+    { "id": "portal-right-south", "asset": "portalArch", "team": "purple", "position": [7.05, 0, 1.02], "rotationY": 180 },
+    { "id": "gate-north", "asset": "mainGate", "position": [0, 0, -4.38], "rotationY": -90, "scale": 1.02 },
+    { "id": "gate-south", "asset": "mainGate", "position": [0, 0, 4.62], "rotationY": 90, "scale": 0.9 },
+    { "id": "tower-northwest", "asset": "lanternTower", "position": [-5.38, 0, -3.68], "rotationY": 8 },
+    { "id": "tower-northeast", "asset": "lanternTower", "position": [5.38, 0, -3.68], "rotationY": -8 },
+    { "id": "tower-southwest", "asset": "lanternTower", "position": [-5.92, 0, 3.72], "rotationY": -8 },
+    { "id": "tower-southeast", "asset": "lanternTower", "position": [5.92, 0, 3.72], "rotationY": 8 },
+
+    { "id": "pink-crown-northwest", "asset": "pinkTree", "position": [-4.15, 0, -5.05], "rotationY": 18, "scale": 1.0 },
+    { "id": "pink-crown-southwest", "asset": "pinkTree", "position": [-7.72, 0, 4.28], "rotationY": -20, "scale": 0.93 },
+    { "id": "pink-crown-southeast", "asset": "pinkTree", "position": [7.72, 0, 4.28], "rotationY": 24, "scale": 0.93 },
+    { "id": "emerald-crown-northeast", "asset": "emeraldTree", "position": [4.1, 0, -5.02], "rotationY": -12, "scale": 1.0 },
+    { "id": "emerald-crown-west", "asset": "emeraldTree", "position": [-7.55, 0, -3.74], "rotationY": 28, "scale": 0.82 },
+    { "id": "teal-crown-northwest", "asset": "tealTree", "position": [-6.72, 0, -4.28], "rotationY": -17, "scale": 0.82 },
+    { "id": "teal-crown-northeast", "asset": "tealTree", "position": [6.72, 0, -4.28], "rotationY": 21, "scale": 0.84 },
+
+    { "id": "palm-gate-northwest", "asset": "gardenPalm", "position": [-1.82, 0, -4.64], "rotationY": -22, "scale": 0.7 },
+    { "id": "palm-gate-northeast", "asset": "gardenPalm", "position": [1.82, 0, -4.64], "rotationY": 18, "scale": 0.7 },
+    { "id": "palm-side-west", "asset": "gardenPalm", "position": [-7.75, 0, -3.1], "rotationY": 12, "scale": 0.75 },
+    { "id": "palm-side-east", "asset": "gardenPalm", "position": [7.75, 0, -3.1], "rotationY": -14, "scale": 0.75 },
+    { "id": "palm-gate-southwest", "asset": "gardenPalm", "position": [-1.92, 0, 4.72], "rotationY": 28, "scale": 0.72 },
+    { "id": "palm-gate-southeast", "asset": "gardenPalm", "position": [1.92, 0, 4.72], "rotationY": -26, "scale": 0.72 },
+
+    { "id": "flowers-northwest-outer", "asset": "flowerBush", "position": [-5.62, 0.02, -4.04], "rotationY": 12, "scale": 0.92 },
+    { "id": "flowers-northwest-inner", "asset": "flowerBush", "position": [-2.82, 0.02, -4.06], "rotationY": -14, "scale": 0.78 },
+    { "id": "flowers-northeast-inner", "asset": "flowerBush", "position": [2.82, 0.02, -4.06], "rotationY": 16, "scale": 0.78 },
+    { "id": "flowers-northeast-outer", "asset": "flowerBush", "position": [5.62, 0.02, -4.04], "rotationY": -10, "scale": 0.92 },
+    { "id": "flowers-west-upper", "asset": "flowerBush", "position": [-7.58, 0.02, -2.28], "rotationY": 20, "scale": 0.74 },
+    { "id": "flowers-east-upper", "asset": "flowerBush", "position": [7.58, 0.02, -2.28], "rotationY": -18, "scale": 0.74 },
+    { "id": "flowers-west-lower", "asset": "flowerBush", "position": [-7.38, 0.02, 3.12], "rotationY": -11, "scale": 0.82 },
+    { "id": "flowers-east-lower", "asset": "flowerBush", "position": [7.38, 0.02, 3.12], "rotationY": 13, "scale": 0.82 },
+    { "id": "flowers-southwest", "asset": "flowerBush", "position": [-4.72, 0.02, 4.02], "rotationY": 8, "scale": 0.86 },
+    { "id": "flowers-south-left", "asset": "flowerBush", "position": [-2.8, 0.02, 4.2], "rotationY": -12, "scale": 0.72 },
+    { "id": "flowers-south-right", "asset": "flowerBush", "position": [2.8, 0.02, 4.2], "rotationY": 14, "scale": 0.72 },
+    { "id": "flowers-southeast", "asset": "flowerBush", "position": [4.72, 0.02, 4.02], "rotationY": -8, "scale": 0.86 },
+    { "id": "bush-upper-left", "asset": "flowerBush", "position": [-3.35, 0.02, -1.7], "rotationY": 18, "scale": 0.72 },
+    { "id": "bush-upper-right", "asset": "flowerBush", "position": [3.35, 0.02, -1.7], "rotationY": -18, "scale": 0.72 },
+    { "id": "bush-mid-left", "asset": "flowerBush", "position": [-4.72, 0.02, -0.45], "rotationY": -12, "scale": 0.76 },
+    { "id": "bush-mid-right", "asset": "flowerBush", "position": [4.72, 0.02, -0.45], "rotationY": 12, "scale": 0.76 },
+    { "id": "bush-lower-left", "asset": "flowerBush", "position": [-4.28, 0.02, 1.65], "rotationY": 14, "scale": 0.74 },
+    { "id": "bush-lower-right", "asset": "flowerBush", "position": [4.28, 0.02, 1.65], "rotationY": -14, "scale": 0.74 },
+    { "id": "bush-bottom-left", "asset": "flowerBush", "position": [-3.08, 0.02, 2.45], "rotationY": -9, "scale": 0.7 },
+    { "id": "bush-bottom-right", "asset": "flowerBush", "position": [3.08, 0.02, 2.45], "rotationY": 9, "scale": 0.7 },
+
+    { "id": "wall-northwest-outer", "asset": "straightWall", "position": [-6.62, 0, -4.76], "rotationY": 82, "scale": 1.02 },
+    { "id": "wall-northwest-mid", "asset": "straightWall", "position": [-4.52, 0, -4.92], "rotationY": 86, "scale": 1.02 },
+    { "id": "wall-northwest-inner", "asset": "straightWall", "position": [-2.48, 0, -4.96], "rotationY": 90, "scale": 0.92 },
+    { "id": "wall-northeast-inner", "asset": "straightWall", "position": [2.48, 0, -4.96], "rotationY": 90, "scale": 0.92 },
+    { "id": "wall-northeast-mid", "asset": "straightWall", "position": [4.52, 0, -4.92], "rotationY": 94, "scale": 1.02 },
+    { "id": "wall-northeast-outer", "asset": "straightWall", "position": [6.62, 0, -4.76], "rotationY": 98, "scale": 1.02 },
+    { "id": "wall-southwest-outer", "asset": "straightWall", "position": [-6.56, 0, 4.88], "rotationY": 98, "scale": 1.02 },
+    { "id": "wall-southwest-mid", "asset": "straightWall", "position": [-4.45, 0, 5.04], "rotationY": 94, "scale": 1.02 },
+    { "id": "wall-southwest-inner", "asset": "straightWall", "position": [-2.42, 0, 5.08], "rotationY": 90, "scale": 0.9 },
+    { "id": "wall-southeast-inner", "asset": "straightWall", "position": [2.42, 0, 5.08], "rotationY": 90, "scale": 0.9 },
+    { "id": "wall-southeast-mid", "asset": "straightWall", "position": [4.45, 0, 5.04], "rotationY": 86, "scale": 1.02 },
+    { "id": "wall-southeast-outer", "asset": "straightWall", "position": [6.56, 0, 4.88], "rotationY": 82, "scale": 1.02 },
+    { "id": "wall-west-north", "asset": "straightWall", "position": [-8.18, 0, -3.52], "rotationY": -8, "scale": 0.9 },
+    { "id": "wall-west-midnorth", "asset": "straightWall", "position": [-8.18, 0, -2.12], "rotationY": -2, "scale": 0.72 },
+    { "id": "wall-west-midsouth", "asset": "straightWall", "position": [-8.18, 0, 2.04], "rotationY": 2, "scale": 0.72 },
+    { "id": "wall-west-south", "asset": "straightWall", "position": [-8.18, 0, 3.48], "rotationY": 8, "scale": 0.9 },
+    { "id": "wall-east-north", "asset": "straightWall", "position": [8.18, 0, -3.52], "rotationY": 8, "scale": 0.9 },
+    { "id": "wall-east-midnorth", "asset": "straightWall", "position": [8.18, 0, -2.12], "rotationY": 2, "scale": 0.72 },
+    { "id": "wall-east-midsouth", "asset": "straightWall", "position": [8.18, 0, 2.04], "rotationY": -2, "scale": 0.72 },
+    { "id": "wall-east-south", "asset": "straightWall", "position": [8.18, 0, 3.48], "rotationY": -8, "scale": 0.9 },
+    { "id": "cover-upper-left", "asset": "straightWall", "position": [-1.45, 0, -2.5], "rotationY": 90, "scale": 0.58 },
+    { "id": "cover-upper-right", "asset": "straightWall", "position": [1.45, 0, -2.5], "rotationY": 90, "scale": 0.58 },
+    { "id": "cover-upper-far-left", "asset": "straightWall", "position": [-4.15, 0, -1.63], "rotationY": 0, "scale": 0.42 },
+    { "id": "cover-upper-center", "asset": "straightWall", "position": [0, 0, -1.58], "rotationY": 90, "scale": 0.62 },
+    { "id": "cover-upper-far-right", "asset": "straightWall", "position": [4.15, 0, -1.63], "rotationY": 0, "scale": 0.42 },
+    { "id": "cover-mid-left", "asset": "straightWall", "position": [-2.18, 0, -0.72], "rotationY": 70, "scale": 0.55 },
+    { "id": "cover-mid-right", "asset": "straightWall", "position": [2.18, 0, -0.72], "rotationY": 110, "scale": 0.55 },
+    { "id": "cover-lower-mid-left", "asset": "straightWall", "position": [-2.1, 0, 0.92], "rotationY": 110, "scale": 0.56 },
+    { "id": "cover-lower-mid-right", "asset": "straightWall", "position": [2.1, 0, 0.92], "rotationY": 70, "scale": 0.56 },
+    { "id": "cover-lower-center", "asset": "straightWall", "position": [0, 0, 1.7], "rotationY": 90, "scale": 0.64 },
+    { "id": "cover-lower-far-left", "asset": "straightWall", "position": [-4.55, 0, 2.15], "rotationY": 0, "scale": 0.42 },
+    { "id": "cover-lower-far-right", "asset": "straightWall", "position": [4.55, 0, 2.15], "rotationY": 0, "scale": 0.42 },
+    { "id": "cover-bottom-left", "asset": "straightWall", "position": [-2.1, 0, 2.92], "rotationY": 70, "scale": 0.56 },
+    { "id": "cover-bottom-right", "asset": "straightWall", "position": [2.1, 0, 2.92], "rotationY": 110, "scale": 0.56 },
+
+    { "id": "corner-northwest", "asset": "cornerWall", "position": [-7.92, 0, -4.62], "rotationY": 0 },
+    { "id": "corner-northeast", "asset": "cornerWall", "position": [7.92, 0, -4.62], "rotationY": 90 },
+    { "id": "corner-southwest", "asset": "cornerWall", "position": [-7.92, 0, 4.68], "rotationY": -90 },
+    { "id": "corner-southeast", "asset": "cornerWall", "position": [7.92, 0, 4.68], "rotationY": 180 },
+
+    { "id": "waterway-northwest-outer", "asset": "waterway", "position": [-6.15, -0.02, -4.34], "rotationY": 90, "scale": 0.92 },
+    { "id": "waterway-northwest-inner", "asset": "waterway", "position": [-3.25, -0.02, -4.34], "rotationY": 90, "scale": 0.92 },
+    { "id": "waterway-northeast-inner", "asset": "waterway", "position": [3.25, -0.02, -4.34], "rotationY": 90, "scale": 0.92 },
+    { "id": "waterway-northeast-outer", "asset": "waterway", "position": [6.15, -0.02, -4.34], "rotationY": 90, "scale": 0.92 },
+    { "id": "waterway-southwest-outer", "asset": "waterway", "position": [-6.15, -0.02, 4.36], "rotationY": 90, "scale": 0.92 },
+    { "id": "waterway-southwest-inner", "asset": "waterway", "position": [-3.25, -0.02, 4.36], "rotationY": 90, "scale": 0.92 },
+    { "id": "waterway-south-center", "asset": "waterway", "position": [0, -0.02, 4.36], "rotationY": 90, "scale": 0.78 },
+    { "id": "waterway-southeast-inner", "asset": "waterway", "position": [3.25, -0.02, 4.36], "rotationY": 90, "scale": 0.92 },
+    { "id": "waterway-southeast-outer", "asset": "waterway", "position": [6.15, -0.02, 4.36], "rotationY": 90, "scale": 0.92 },
+    { "id": "waterway-west", "asset": "waterway", "position": [-8.48, -0.02, 0], "rotationY": 0, "scale": 0.82 },
+    { "id": "waterway-east", "asset": "waterway", "position": [8.48, -0.02, 0], "rotationY": 0, "scale": 0.82 },
+
+    { "id": "waterfall-west", "asset": "waterfallCliff", "position": [-8.72, 0, -0.08], "rotationY": 90, "scale": 0.62 },
+    { "id": "waterfall-east", "asset": "waterfallCliff", "position": [8.72, 0, -0.08], "rotationY": -90, "scale": 0.62 }
+  ]
+}

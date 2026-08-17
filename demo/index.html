@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Garden Arena · Reference-Matched Placement</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.js",
+          "three/addons/": "./vendor/addons/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="scene" aria-label="정원 아레나 핵심 오브젝트와 외곽 환경 배치"></canvas>
+
+      <section class="panel" aria-label="장면 조작 패널">
+        <p class="eyebrow">REFERENCE-MATCHED · TRIPO GLB</p>
+        <h1>Garden Arena Layout</h1>
+        <p class="description">원화의 좌우 대칭, 중앙 전투 공간, 포탈·수로·식생·외곽 프레임 위치를 기준으로 다시 배치한 비교 프리뷰입니다.</p>
+
+        <div class="view-buttons" role="group" aria-label="카메라 시점">
+          <button class="active" data-view="overview">Match view</button>
+          <button data-view="top">Top view</button>
+        </div>
+
+        <div class="toggles">
+          <label><input id="core-objects" type="checkbox" checked /> Core objects</label>
+          <label><input id="environment" type="checkbox" checked /> Environment</label>
+          <label><input id="effects" type="checkbox" checked /> Team glow</label>
+          <label><input id="reference" type="checkbox" checked /> Original</label>
+        </div>
+
+        <div class="legend" aria-label="팀 포탈 색상">
+          <span><i class="cyan"></i>Left portals</span>
+          <span><i class="purple"></i>Right portals</span>
+        </div>
+
+        <p id="stats" class="stats">Loading models…</p>
+      </section>
+
+      <figure id="reference-card" class="reference-card">
+        <img src="../00-concept-reference.jpg" alt="배치 기준 원화" />
+        <figcaption>Original layout reference</figcaption>
+      </figure>
+
+      <div id="loading" class="loading">
+        <span class="spinner"></span>
+        <strong>Loading Tripo meshes</strong>
+        <small id="progress">0%</small>
+      </div>
+
+      <pre id="validation" hidden></pre>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
