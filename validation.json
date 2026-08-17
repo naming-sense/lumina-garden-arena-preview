@@ -29,7 +29,9 @@
   "uniqueTriangles": 357265,
   "renderedTriangles": 2452063,
   "publicPreview": {
-    "url": "https://nobody-note-table-advertisements.trycloudflare.com/demo/",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/",
+    "hosting": "GitHub Pages",
+    "pagesBuildStatus": "built",
     "pageHttpStatus": 200,
     "placementHttpStatus": 200,
     "fullWebglLoad": true,
