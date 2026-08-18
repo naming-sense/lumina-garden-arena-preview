@@ -2,7 +2,7 @@
 
 `garden-arena-flooronly-threejs-v8` 바닥 위의 Tripo 메시를 원화 구도에 맞춰 다시 배치한 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=4>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=5>
 
 ## 장면 구성
 
