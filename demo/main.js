@@ -4,6 +4,12 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const params = new URLSearchParams(window.location.search);
 if (params.get("ui") === "0") document.body.classList.add("hide-ui");
+const forcedQuality = params.get("quality");
+const isConstrainedDevice =
+  forcedQuality === "mobile" ||
+  (forcedQuality !== "desktop" &&
+    (window.matchMedia("(max-width: 820px)").matches ||
+      (navigator.deviceMemory ?? 8) <= 4));
 
 const canvas = document.querySelector("#scene");
 const loading = document.querySelector("#loading");
@@ -14,16 +20,16 @@ const referenceCard = document.querySelector("#reference-card");
 
 const renderer = new THREE.WebGLRenderer({
   canvas,
-  antialias: true,
+  antialias: !isConstrainedDevice,
   alpha: true,
-  preserveDrawingBuffer: true,
+  powerPreference: isConstrainedDevice ? "low-power" : "high-performance",
 });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
+renderer.setPixelRatio(isConstrainedDevice ? 1 : Math.min(window.devicePixelRatio, 1.6));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = !isConstrainedDevice;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
@@ -66,8 +72,8 @@ scene.add(hemisphere);
 
 const keyLight = new THREE.DirectionalLight(0xfff1d6, 2.2);
 keyLight.position.set(-6, 13, 8);
-keyLight.castShadow = true;
-keyLight.shadow.mapSize.set(2048, 2048);
+keyLight.castShadow = !isConstrainedDevice;
+keyLight.shadow.mapSize.set(isConstrainedDevice ? 512 : 2048, isConstrainedDevice ? 512 : 2048);
 keyLight.shadow.camera.left = -12;
 keyLight.shadow.camera.right = 12;
 keyLight.shadow.camera.top = 9;
@@ -94,12 +100,32 @@ environmentRoot.name = "environment-object-instances";
 objectRoot.add(environmentRoot);
 
 const loadingManager = new THREE.LoadingManager();
+let displayedProgress = 0;
 loadingManager.onProgress = (_url, loaded, total) => {
-  progress.textContent = `${Math.round((loaded / Math.max(total, 1)) * 100)}%`;
+  const measured = Math.round((loaded / Math.max(total, 1)) * 100);
+  displayedProgress = Math.max(displayedProgress, Math.min(measured, 99));
+  progress.textContent = `${displayedProgress}%`;
 };
 
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const gltfLoader = new GLTFLoader(loadingManager);
+
+async function mapWithConcurrency(items, concurrency, mapper) {
+  const results = new Array(items.length);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (nextIndex < items.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      results[index] = await mapper(items[index], index);
+    }
+  }
+
+  const workerCount = Math.min(concurrency, items.length);
+  await Promise.all(Array.from({ length: workerCount }, () => worker()));
+  return results;
+}
 
 function countTriangles(root) {
   let triangles = 0;
@@ -132,8 +158,8 @@ function prepareTemplate(gltfScene, targetHeight) {
 
   model.traverse((child) => {
     if (!child.isMesh) return;
-    child.castShadow = true;
-    child.receiveShadow = true;
+    child.castShadow = !isConstrainedDevice;
+    child.receiveShadow = !isConstrainedDevice;
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     for (const material of materials) {
       if (!material) continue;
@@ -245,15 +271,18 @@ function setEffectsVisible(visible) {
 
 async function buildScene() {
   const [placement, floorMap] = await Promise.all([
-    fetch("../scene-placement.json").then((response) => {
+    fetch("../scene-placement.json?v=4").then((response) => {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
-    textureLoader.loadAsync("../01-floor-only-map.png"),
+    textureLoader.loadAsync("../01-floor-only-map.png?v=4"),
   ]);
 
   floorMap.colorSpace = THREE.SRGBColorSpace;
-  floorMap.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  floorMap.anisotropy = Math.min(
+    renderer.capabilities.getMaxAnisotropy(),
+    isConstrainedDevice ? 2 : 16,
+  );
   floorMap.minFilter = THREE.LinearMipmapLinearFilter;
   floorMap.magFilter = THREE.LinearFilter;
 
@@ -277,15 +306,18 @@ async function buildScene() {
     }),
   );
   floor.rotation.x = -Math.PI / 2;
-  floor.receiveShadow = true;
+  floor.receiveShadow = !isConstrainedDevice;
   scene.add(floor);
 
   const modelEntries = Object.entries(placement.models);
-  const templateEntries = await Promise.all(
-    modelEntries.map(async ([key, config]) => {
+  const loadingConcurrency = isConstrainedDevice ? 2 : 4;
+  const templateEntries = await mapWithConcurrency(
+    modelEntries,
+    loadingConcurrency,
+    async ([key, config]) => {
       const gltf = await gltfLoader.loadAsync(config.url);
       return [key, prepareTemplate(gltf.scene, config.targetHeight)];
-    }),
+    },
   );
   const templates = Object.fromEntries(templateEntries);
 
@@ -305,6 +337,10 @@ async function buildScene() {
   const report = {
     ready: true,
     floor: "2048x1152 v8",
+    webOptimized: true,
+    textureResolution: 1024,
+    constrainedDevice: isConstrainedDevice,
+    loadingConcurrency,
     uniqueModels: modelEntries.length,
     instances: placement.instances.length,
     coreInstances: placement.instances.filter(
@@ -329,6 +365,7 @@ async function buildScene() {
   document.body.dataset.ready = "true";
   window.__ARENA_READY__ = true;
   window.__ARENA_REPORT__ = report;
+  progress.textContent = "100%";
   loading.classList.add("hidden");
 }
 
