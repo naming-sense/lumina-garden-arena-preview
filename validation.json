@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-18T07:16:26+09:00",
+  "validatedAt": "2026-08-18T11:14:02+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
@@ -41,13 +41,34 @@
     "mobileShadows": false,
     "monotonicLoadingProgress": true
   },
+  "lightingPolish": {
+    "preset": "bright-garden-v2-balanced",
+    "toneMapping": "Neutral",
+    "toneMappingExposure": 1.08,
+    "ambientIntensity": 0.32,
+    "hemisphereIntensity": 1.72,
+    "keyIntensity": 2.55,
+    "fillIntensity": 0.96,
+    "frontFillIntensity": 0.48,
+    "texturedMaterialAmbientLift": 0.075,
+    "floorAmbientLift": 0,
+    "floorSaturation": 0.72,
+    "planterAmbientLift": 0.42,
+    "planterMaxMetalness": 0,
+    "flowerBushAmbientLift": 0.2,
+    "naturalMaterialMaxMetalness": 0.12,
+    "desktopVisualCheck": true,
+    "mobileVisualCheck": true
+  },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=7",
     "hosting": "GitHub Pages",
     "pagesBuildStatus": "built",
     "pageHttpStatus": 200,
     "placementHttpStatus": 200,
     "fullWebglLoad": true,
+    "verifiedDesktop": true,
+    "verifiedMobilePortrait": true,
     "verifiedInstances": 95
   },
   "blenderReimport": {
@@ -77,7 +98,9 @@
     "00-concept-reference.jpg": "fe9f4e16f1eab3e618bae6e1db92fef4897f6a4d8620b09542abebb20e92d320",
     "01-floor-only-map.png": "ad083c5faf77f5addb4b1be2c74ae8f0304c3f6e72ab74fc391f34b7d3dbf99d",
     "scene-placement.json": "43773ecda3f3ca8fd421e6916c0e9aa4a7bf72f7ac7bfd208057ae05a0feeeb0",
-    "demo/main.js": "dafce4105dc5d3f266d49c72d9206dff2fdbb2602d3b78851ae15ccff0e2ebba",
+    "demo/main.js": "3dc1f396949eceda84c956bef510a63d5ffc07db4d4f444c4eeb2022ba566ab9",
+    "demo/style.css": "465e3dc92d993567eebf799d1f7c3063fda2385c353e75b728984533a947889d",
+    "demo/index.html": "18f1ef52357bf121c1d6d54e7e7e1ef46214ea9e9257c816d3a8e686060e9ae0",
     "models/03-garden-crystal-shrine.glb": "0800e3402dda1640c0dd35a20e1b153d9912e6d85a2665d2d46548083f63a739",
     "models/04-garden-portal-arch.glb": "20aea08923cc6a321c51a1a0e8e9672d2574be9eab4f24fd1e0151ea0772518b",
     "models/05-garden-main-gate.glb": "dd087029c1254212f00242260d2f3373b02efb5de437f16662ea3048295454b6",

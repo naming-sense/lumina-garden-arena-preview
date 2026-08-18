@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v6
+# Garden Arena Reference-Matched Placement · Three.js v7
 
 `garden-arena-flooronly-threejs-v8` 바닥 위의 Tripo 메시를 원화 구도에 맞춰 다시 배치한 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=6>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=7>
 
 ## 장면 구성
 
@@ -48,4 +48,4 @@ python3 -m http.server 8795
 
 ## 밝기 폴리싱
 
-v6는 Neutral tone mapping, 따뜻한 키라이트와 청록 필라이트, 반구광·전면 보조광을 사용한다. 텍스처 재질에는 0.1 강도의 알베도 기반 간접광을 더해 그늘에서도 원색과 중간 디테일이 사라지지 않게 했고, 바닥에는 더 약한 0.075 강도만 적용해 평면적으로 뜨지 않도록 했다.
+v7은 Neutral tone mapping, 따뜻한 키라이트와 청록 필라이트, 반구광·전면 보조광을 유지하면서 톤을 다시 균형화했다. 바닥의 인위적 발광을 제거하고 채도를 72%로 제한했으며, 중앙 화단·담장은 금속도를 제거하고 0.42 강도의 간접광을 별도로 적용해 바닥보다 어둡게 꺼지지 않도록 했다. 꽃덤불도 동일한 방향으로 더 약하게 보정했다.

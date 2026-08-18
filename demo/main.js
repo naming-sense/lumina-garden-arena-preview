@@ -29,7 +29,7 @@ renderer.setPixelRatio(isConstrainedDevice ? 1 : Math.min(window.devicePixelRati
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NeutralToneMapping;
-renderer.toneMappingExposure = 1.16;
+renderer.toneMappingExposure = 1.08;
 renderer.shadowMap.enabled = !isConstrainedDevice;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -159,8 +159,19 @@ function countTriangles(root) {
   return Math.round(triangles);
 }
 
-function prepareTemplate(gltfScene, targetHeight) {
+const materialTuningByAsset = {
+  straightWall: { emissiveLift: 0.42, maxMetalness: 0, minRoughness: 0.82 },
+  cornerWall: { emissiveLift: 0.42, maxMetalness: 0, minRoughness: 0.82 },
+  flowerBush: { emissiveLift: 0.2, maxMetalness: 0.04, minRoughness: 0.76 },
+};
+
+function prepareTemplate(gltfScene, targetHeight, assetKey) {
   const model = gltfScene;
+  const tuning = materialTuningByAsset[assetKey] ?? {
+    emissiveLift: 0.075,
+    maxMetalness: 0.12,
+    minRoughness: 0.66,
+  };
   model.updateMatrixWorld(true);
 
   let bounds = new THREE.Box3().setFromObject(model);
@@ -184,10 +195,14 @@ function prepareTemplate(gltfScene, targetHeight) {
     for (const material of materials) {
       if (!material) continue;
       material.envMapIntensity = 0.88;
+      if (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial) {
+        material.metalness = Math.min(material.metalness, tuning.maxMetalness);
+        material.roughness = Math.max(material.roughness, tuning.minRoughness);
+      }
       if ((material.isMeshStandardMaterial || material.isMeshPhysicalMaterial) && material.map) {
-        material.emissive.set(0xffffff);
+        material.emissive.set(0xfff4e8);
         material.emissiveMap = material.map;
-        material.emissiveIntensity = 0.1;
+        material.emissiveIntensity = tuning.emissiveLift;
       }
       material.needsUpdate = true;
     }
@@ -322,16 +337,25 @@ async function buildScene() {
   underlay.position.y = -0.055;
   scene.add(underlay);
 
+  const floorMaterial = new THREE.MeshStandardMaterial({
+    map: floorMap,
+    roughness: 0.94,
+    metalness: 0,
+  });
+  const floorSaturation = 0.72;
+  floorMaterial.onBeforeCompile = (shader) => {
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <color_fragment>",
+      `#include <color_fragment>
+       float floorLuma = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+       diffuseColor.rgb = mix(vec3(floorLuma), diffuseColor.rgb, ${floorSaturation.toFixed(2)});`,
+    );
+  };
+  floorMaterial.customProgramCacheKey = () => `garden-floor-saturation-${floorSaturation}`;
+
   const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(placement.arena.width, placement.arena.depth),
-    new THREE.MeshStandardMaterial({
-      map: floorMap,
-      emissive: 0xffffff,
-      emissiveMap: floorMap,
-      emissiveIntensity: 0.075,
-      roughness: 0.94,
-      metalness: 0,
-    }),
+    floorMaterial,
   );
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = !isConstrainedDevice;
@@ -344,7 +368,7 @@ async function buildScene() {
     loadingConcurrency,
     async ([key, config]) => {
       const gltf = await gltfLoader.loadAsync(config.url);
-      return [key, prepareTemplate(gltf.scene, config.targetHeight)];
+      return [key, prepareTemplate(gltf.scene, config.targetHeight, key)];
     },
   );
   const templates = Object.fromEntries(templateEntries);
@@ -367,10 +391,13 @@ async function buildScene() {
     floor: "2048x1152 v8",
     webOptimized: true,
     textureResolution: 1024,
-    lightingPreset: "bright-garden-v1",
+    lightingPreset: "bright-garden-v2-balanced",
     toneMapping: "Neutral",
     toneMappingExposure: renderer.toneMappingExposure,
-    texturedMaterialAmbientLift: 0.1,
+    floorSaturation,
+    texturedMaterialAmbientLift: 0.075,
+    planterAmbientLift: 0.42,
+    naturalMaterialMaxMetalness: 0.12,
     constrainedDevice: isConstrainedDevice,
     portraitMobile: isPortraitMobile,
     loadingConcurrency,
