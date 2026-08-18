@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v28
+# Garden Arena Reference-Matched Placement · Three.js v29
 
 원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 장면의 Tripo GLB 14종에 남아 있던 숨은 로컬 회전을 모두 제거하고 삼각형 진단 도구를 추가한 v16 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=28>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=29>
 
 ## 장면 구성
 
@@ -34,6 +34,8 @@
 v28의 `perimeterFrame`은 액자 프레임 원본 모델의 비율을 실제 라이브 맵 외곽 X `18.59`, Z `10.66`에 맞추기 위해 `scale: [x, y, z]`를 사용한다. 상·하단 게이트는 프레임 안쪽 Z `±4.05`에, 좌우 폭포는 프레임 상단 X `±9.3`, Y `0.82`에 정렬했다. 게이트·폭포 GLB는 루트 노드를 identity quaternion으로 유지한 채 메시 정점 방향을 축 정렬로 베이크했다. 따라서 배치의 Yaw `±90°` 뒤에도 상·하단 게이트와 좌우 폭포가 프레임 변과 평행하다.
 
 v27은 레벨에서만 적용하던 크림색 emissive 곱셈을 중립 백색으로 바꿔 모델 프리뷰와 실시간 레벨의 색감 차이를 없앴다. 핑크 나무의 꽃잎은 원화 기준 진분홍 마젠타로 보정하되, 줄기·잎·그림자 색은 그대로 유지한다.
+
+v29는 원본 텍스처 색을 검수하는 `Unlit` 비교 모드를 추가했다. `?render=unlit` 또는 패널의 `Unlit` 버튼을 사용하면 모든 GLB와 바닥을 `MeshBasicMaterial`로 렌더링하고, 조명·그림자·포그·톤매핑·emissive·꽃잎 색보정·팀 글로우·접지 그림자를 끈다. 기본 `Shaded` 모드는 기존 원화 보정 프리셋을 유지한다.
 
 ## 실행
 

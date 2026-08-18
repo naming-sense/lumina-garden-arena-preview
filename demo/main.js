@@ -21,7 +21,11 @@ const triangleSummaryElement = document.querySelector("#triangle-summary");
 const triangleBodyElement = document.querySelector("#triangle-body");
 const validationElement = document.querySelector("#validation");
 const referenceCard = document.querySelector("#reference-card");
-let wireframeEnabled = params.get("render") === "wireframe";
+let renderMode = ["wireframe", "unlit"].includes(params.get("render"))
+  ? params.get("render")
+  : "shaded";
+let wireframeEnabled = renderMode === "wireframe";
+let unlitEnabled = renderMode === "unlit";
 triangleDetailsElement.open = params.get("stats") === "1";
 
 const renderer = new THREE.WebGLRenderer({
@@ -40,11 +44,17 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.autoUpdate = !isConstrainedDevice;
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(
+const shadedFog = new THREE.Fog(
   0xd7f5f0,
   isPortraitMobile ? 30 : 24,
   isPortraitMobile ? 65 : 43,
 );
+scene.fog = shadedFog;
+
+let floor = null;
+let floorShadedMaterial = null;
+let floorUnlitMaterial = null;
+let underlay = null;
 
 const camera = new THREE.PerspectiveCamera(
   isPortraitMobile ? 60 : 31,
@@ -481,6 +491,7 @@ function setEffectsVisible(visible) {
 }
 
 const wireframeMaterialCache = new WeakMap();
+const unlitMaterialCache = new WeakMap();
 
 function hasTaggedAncestor(object, tag) {
   let current = object;
@@ -506,13 +517,36 @@ function getWireframeMaterial(source) {
   return material;
 }
 
+function getUnlitMaterial(source) {
+  if (unlitMaterialCache.has(source)) return unlitMaterialCache.get(source);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    map: source.map ?? null,
+    alphaMap: source.alphaMap ?? null,
+    transparent: source.transparent,
+    opacity: source.opacity,
+    alphaTest: source.alphaTest,
+    side: source.side,
+    depthWrite: source.depthWrite,
+    depthTest: source.depthTest,
+    vertexColors: source.vertexColors,
+    fog: false,
+    toneMapped: false,
+  });
+  material.name = `${source.name || "material"}-raw-unlit`;
+  unlitMaterialCache.set(source, material);
+  return material;
+}
+
 function setRenderMode(mode) {
-  wireframeEnabled = mode === "wireframe";
+  renderMode = ["shaded", "wireframe", "unlit"].includes(mode) ? mode : "shaded";
+  wireframeEnabled = renderMode === "wireframe";
+  unlitEnabled = renderMode === "unlit";
   objectRoot.traverse((child) => {
     if (!child.isMesh) return;
     if (hasTaggedAncestor(child, "effect")) return;
     if (hasTaggedAncestor(child, "contactShadow")) {
-      child.visible = !wireframeEnabled;
+      child.visible = renderMode === "shaded";
       return;
     }
 
@@ -525,18 +559,36 @@ function setRenderMode(mode) {
       child.material = Array.isArray(child.userData.shadedMaterial)
         ? wireframeMaterials
         : wireframeMaterials[0];
+    } else if (unlitEnabled) {
+      if (!child.userData.shadedMaterial) child.userData.shadedMaterial = child.material;
+      const shadedMaterials = Array.isArray(child.userData.shadedMaterial)
+        ? child.userData.shadedMaterial
+        : [child.userData.shadedMaterial];
+      const unlitMaterials = shadedMaterials.map(getUnlitMaterial);
+      child.material = Array.isArray(child.userData.shadedMaterial)
+        ? unlitMaterials
+        : unlitMaterials[0];
     } else if (child.userData.shadedMaterial) {
       child.material = child.userData.shadedMaterial;
     }
   });
 
-  renderer.shadowMap.enabled = !wireframeEnabled;
-  if (!wireframeEnabled && isConstrainedDevice) renderer.shadowMap.needsUpdate = true;
+  renderer.toneMapping = unlitEnabled ? THREE.NoToneMapping : THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = unlitEnabled ? 1 : 0.99;
+  renderer.shadowMap.enabled = renderMode === "shaded";
+  scene.fog = unlitEnabled ? null : shadedFog;
+  if (floor && floorUnlitMaterial && floorShadedMaterial) {
+    floor.material = unlitEnabled ? floorUnlitMaterial : floorShadedMaterial;
+    floor.receiveShadow = !unlitEnabled;
+  }
+  if (underlay) underlay.visible = !unlitEnabled;
+  if (renderMode === "shaded" && isConstrainedDevice) renderer.shadowMap.needsUpdate = true;
   setEffectsVisible(
-    !wireframeEnabled && document.querySelector("#effects").checked,
+    renderMode === "shaded" && document.querySelector("#effects").checked,
   );
   document.body.classList.toggle("wireframe-mode", wireframeEnabled);
-  document.body.dataset.renderMode = wireframeEnabled ? "wireframe" : "shaded";
+  document.body.classList.toggle("unlit-mode", unlitEnabled);
+  document.body.dataset.renderMode = renderMode;
   window.__ARENA_RENDER_MODE__ = document.body.dataset.renderMode;
   document.querySelectorAll("button[data-render-mode]").forEach((button) => {
     button.classList.toggle("active", button.dataset.renderMode === mode);
@@ -560,7 +612,7 @@ async function buildScene() {
   floorMap.minFilter = THREE.LinearMipmapLinearFilter;
   floorMap.magFilter = THREE.LinearFilter;
 
-  const underlay = new THREE.Mesh(
+  underlay = new THREE.Mesh(
     new THREE.PlaneGeometry(
       placement.arena.environmentWidth,
       placement.arena.environmentDepth,
@@ -571,13 +623,13 @@ async function buildScene() {
   underlay.position.y = -0.055;
   scene.add(underlay);
 
-  const floorMaterial = new THREE.MeshStandardMaterial({
+  floorShadedMaterial = new THREE.MeshStandardMaterial({
     map: floorMap,
     roughness: 0.94,
     metalness: 0,
   });
   const floorSaturation = 0.9;
-  floorMaterial.onBeforeCompile = (shader) => {
+  floorShadedMaterial.onBeforeCompile = (shader) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <color_fragment>",
       `#include <color_fragment>
@@ -585,11 +637,12 @@ async function buildScene() {
        diffuseColor.rgb = mix(vec3(floorLuma), diffuseColor.rgb, ${floorSaturation.toFixed(2)});`,
     );
   };
-  floorMaterial.customProgramCacheKey = () => `garden-floor-saturation-${floorSaturation}`;
+  floorShadedMaterial.customProgramCacheKey = () => `garden-floor-saturation-${floorSaturation}`;
+  floorUnlitMaterial = new THREE.MeshBasicMaterial({ map: floorMap, color: 0xffffff, fog: false, toneMapped: false });
 
-  const floor = new THREE.Mesh(
+  floor = new THREE.Mesh(
     new THREE.PlaneGeometry(placement.arena.width, placement.arena.depth),
-    floorMaterial,
+    floorShadedMaterial,
   );
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
@@ -712,7 +765,7 @@ async function buildScene() {
   progress.textContent = "100%";
   loading.classList.add("hidden");
   if (isConstrainedDevice) renderer.shadowMap.needsUpdate = true;
-  setRenderMode(wireframeEnabled ? "wireframe" : "shaded");
+  setRenderMode(renderMode);
 }
 
 document.querySelectorAll("[data-view]").forEach((button) => {
@@ -734,7 +787,7 @@ document.querySelector("#environment").addEventListener("change", (event) => {
 });
 
 document.querySelector("#effects").addEventListener("change", (event) => {
-  setEffectsVisible(!wireframeEnabled && event.currentTarget.checked);
+  setEffectsVisible(renderMode === "shaded" && event.currentTarget.checked);
 });
 
 document.querySelector("#reference").addEventListener("change", (event) => {

@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-18T22:55:00+09:00",
+  "validatedAt": "2026-08-18T23:10:00+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
@@ -266,10 +266,17 @@
     "topViewCheck": "gates and waterfalls are parallel to their matching perimeter-frame edges",
     "sourceBackup": "models-web/source-pre-axis-bake-v28/"
   },
+  "unlitComparisonV29": {
+    "deepLink": "?render=unlit",
+    "material": "MeshBasicMaterial with original base-color texture, white multiplier and no custom shader",
+    "disabled": ["direct and hemispheric lighting", "shadows", "fog", "tone mapping", "emissive lift", "pink-blossom hue correction", "team glow", "mobile contact shadows", "floor saturation shader"],
+    "defaultShadedModeUnchanged": true,
+    "localTopViewCheck": true
+  },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=28",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=29",
     "hosting": "GitHub Pages",
-    "pagesBuildStatus": "pending v28 deployment",
+    "pagesBuildStatus": "pending v29 deployment",
     "pageHttpStatus": null,
     "placementHttpStatus": null,
     "fullWebglLoad": false,
