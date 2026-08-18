@@ -38,16 +38,23 @@ renderer.setPixelRatio(isConstrainedDevice ? 1 : Math.min(window.devicePixelRati
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NeutralToneMapping;
-renderer.toneMappingExposure = 0.99;
+// Bright pastel daylight, derived from the concept palette. Keep the lift in
+// the render rig (rather than turning every asset emissive or applying a
+// blanket tint) so painted texture detail remains readable.
+const shadedExposure = 1.38;
+renderer.toneMappingExposure = shadedExposure;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.autoUpdate = !isConstrainedDevice;
 
 const scene = new THREE.Scene();
+// Original-concept art baseline: a bright, low-contrast pastel garden rig.
+// Warm daylight, a pale mint sky fill and neutral front fill raise dark GLB
+// textures without a global hue filter or albedo-as-emissive override.
 const shadedFog = new THREE.Fog(
-  0xd7f5f0,
-  isPortraitMobile ? 30 : 24,
-  isPortraitMobile ? 65 : 43,
+  0xe2f7f1,
+  isPortraitMobile ? 39 : 31,
+  isPortraitMobile ? 74 : 53,
 );
 scene.fog = shadedFog;
 
@@ -95,13 +102,13 @@ function setCameraView(name) {
 
 setCameraView(params.get("view") === "top" ? "top" : "overview");
 
-const ambient = new THREE.AmbientLight(0xfff7e8, 0.3);
+const ambient = new THREE.AmbientLight(0xfffbf0, 0.58);
 scene.add(ambient);
 
-const hemisphere = new THREE.HemisphereLight(0xf4fffb, 0x91bd7c, 1.56);
+const hemisphere = new THREE.HemisphereLight(0xe1fbf6, 0xb9dca7, 1.86);
 scene.add(hemisphere);
 
-const keyLight = new THREE.DirectionalLight(0xffefd2, 2.3);
+const keyLight = new THREE.DirectionalLight(0xfff1d9, 3.05);
 keyLight.position.set(-6, 13, 8);
 keyLight.castShadow = true;
 keyLight.shadow.mapSize.set(isConstrainedDevice ? 1024 : 2048, isConstrainedDevice ? 1024 : 2048);
@@ -113,13 +120,14 @@ keyLight.shadow.camera.near = 2;
 keyLight.shadow.camera.far = 38;
 keyLight.shadow.bias = -0.00018;
 keyLight.shadow.normalBias = 0.022;
+keyLight.shadow.intensity = 0.68;
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0x9beaff, 0.82);
+const fillLight = new THREE.DirectionalLight(0xd8faf4, 1.16);
 fillLight.position.set(7, 7, -8);
 scene.add(fillLight);
 
-const frontFill = new THREE.DirectionalLight(0xffd9bd, 0.38);
+const frontFill = new THREE.DirectionalLight(0xfff8ed, 0.62);
 frontFill.position.set(0, 5, 10);
 scene.add(frontFill);
 
@@ -245,37 +253,18 @@ function renderTriangleBreakdown(rows, uniqueTriangles, renderedTriangles) {
 }
 
 const materialTuningByAsset = {
-  perimeterFrame: { emissiveLift: 0.18, maxMetalness: 0, minRoughness: 0.78 },
-  pinkTree: { emissiveLift: 0, maxMetalness: 0.04, minRoughness: 0.7 },
-  flowerBush: { emissiveLift: 0.13, maxMetalness: 0.04, minRoughness: 0.76 },
-  roundedPlanter: { emissiveLift: 0.13, maxMetalness: 0.02, minRoughness: 0.74 },
+  perimeterFrame: { maxMetalness: 0, minRoughness: 0.82 },
+  pinkTree: { maxMetalness: 0.04, minRoughness: 0.76 },
+  flowerBush: { maxMetalness: 0.04, minRoughness: 0.8 },
+  roundedPlanter: { maxMetalness: 0.02, minRoughness: 0.78 },
 };
 const mobileShadowExcludedAssets = new Set(["waterway", "perimeterFrame"]);
-
-function correctPinkBlossomHue(material) {
-  material.onBeforeCompile = (shader) => {
-    shader.fragmentShader = shader.fragmentShader.replace(
-      "#include <map_fragment>",
-      `#include <map_fragment>
-       float pinkBlossomMask = smoothstep(0.18, 0.44, diffuseColor.r - max(diffuseColor.g, diffuseColor.b))
-         * smoothstep(0.50, 0.76, diffuseColor.r);
-       vec3 deepMagenta = vec3(
-         diffuseColor.r * 0.90,
-         diffuseColor.g * 0.26,
-         max(diffuseColor.b * 0.70, diffuseColor.r * 0.45)
-       );
-       diffuseColor.rgb = mix(diffuseColor.rgb, deepMagenta, pinkBlossomMask * 0.92);`,
-    );
-  };
-  material.customProgramCacheKey = () => "pink-blossom-deep-magenta-v1";
-}
 
 function prepareTemplate(gltfScene, targetHeight, assetKey) {
   const model = gltfScene;
   const tuning = materialTuningByAsset[assetKey] ?? {
-    emissiveLift: 0.045,
     maxMetalness: 0.12,
-    minRoughness: 0.66,
+    minRoughness: 0.7,
   };
   model.updateMatrixWorld(true);
 
@@ -299,22 +288,17 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     for (const material of materials) {
       if (!material) continue;
-      material.envMapIntensity = 0.88;
+      material.envMapIntensity = 0.62;
       if (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial) {
         material.metalness = Math.min(material.metalness, tuning.maxMetalness);
         material.roughness = Math.max(material.roughness, tuning.minRoughness);
       }
-      if ((material.isMeshStandardMaterial || material.isMeshPhysicalMaterial) && material.map) {
-        if (assetKey === "pinkTree") {
-          correctPinkBlossomHue(material);
-          material.emissive.set(0x000000);
-          material.emissiveMap = null;
-          material.emissiveIntensity = 0;
-        } else {
-          material.emissive.set(0xffffff);
-          material.emissiveMap = material.map;
-          material.emissiveIntensity = tuning.emissiveLift;
-        }
+      if (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial) {
+        // Intentional glow is created only by portal/crystal effect meshes,
+        // never by a blanket albedo-as-emissive material override.
+        material.emissive.set(0x000000);
+        material.emissiveMap = null;
+        material.emissiveIntensity = 0;
       }
       material.needsUpdate = true;
     }
@@ -574,7 +558,7 @@ function setRenderMode(mode) {
   });
 
   renderer.toneMapping = unlitEnabled ? THREE.NoToneMapping : THREE.NeutralToneMapping;
-  renderer.toneMappingExposure = unlitEnabled ? 1 : 0.99;
+  renderer.toneMappingExposure = unlitEnabled ? 1 : shadedExposure;
   renderer.shadowMap.enabled = renderMode === "shaded";
   scene.fog = unlitEnabled ? null : shadedFog;
   if (floor && floorUnlitMaterial && floorShadedMaterial) {
@@ -597,7 +581,7 @@ function setRenderMode(mode) {
 
 async function buildScene() {
   const [placement, floorMap] = await Promise.all([
-    fetch("../scene-placement.json?v=19").then((response) => {
+    fetch("../scene-placement.json?v=30").then((response) => {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
@@ -628,7 +612,9 @@ async function buildScene() {
     roughness: 0.94,
     metalness: 0,
   });
-  const floorSaturation = 0.9;
+  // The original grass carries enough local colour already. A modest
+  // desaturation keeps the brightened scene pastel rather than neon green.
+  const floorSaturation = 0.88;
   floorShadedMaterial.onBeforeCompile = (shader) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <color_fragment>",
@@ -710,7 +696,7 @@ async function buildScene() {
     floor: "2048x1152 v10 concept-matched grass",
     webOptimized: true,
     textureResolution: 1024,
-    lightingPreset: "pastel-garden-v3-muted",
+    lightingPreset: "pastel-garden-v4-bright",
     toneMapping: "Neutral",
     toneMappingExposure: renderer.toneMappingExposure,
     floorSaturation,
