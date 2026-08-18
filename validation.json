@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-18T12:54:13+09:00",
+  "validatedAt": "2026-08-18T13:13:14+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
@@ -24,11 +24,11 @@
     }
   },
   "uniqueModels": 14,
-  "layoutVersion": 5,
+  "layoutVersion": 6,
   "layoutBasis": "original concept composition and bilateral gameplay symmetry",
-  "instances": 95,
+  "instances": 97,
   "coreInstances": 11,
-  "environmentInstances": 84,
+  "environmentInstances": 86,
   "perAssetInstances": {
     "crystalShrine": 1,
     "portalArch": 4,
@@ -39,14 +39,14 @@
     "tealTree": 2,
     "gardenPalm": 6,
     "flowerBush": 20,
-    "straightWall": 20,
+    "straightWall": 22,
     "roundedPlanter": 14,
     "cornerWall": 4,
     "waterway": 11,
     "waterfallCliff": 2
   },
   "uniqueTriangles": 379898,
-  "renderedTriangles": 2455619,
+  "renderedTriangles": 2500377,
   "webOptimization": {
     "originalModelBytes": 127772844,
     "optimizedModelBytes": 12700052,
@@ -61,7 +61,7 @@
     "mobileShadowMode": "static PCFSoftShadowMap plus instanced contact shadows",
     "mobileShadowMapSize": 1024,
     "mobileShadowMapAutoUpdate": false,
-    "mobileContactShadowInstances": 84,
+    "mobileContactShadowInstances": 86,
     "monotonicLoadingProgress": true
   },
   "lightingPolish": {
@@ -87,7 +87,7 @@
     "mobileVisualCheck": true
   },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=10",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=11",
     "hosting": "GitHub Pages",
     "pagesBuildStatus": "built",
     "pageHttpStatus": 200,
@@ -95,7 +95,7 @@
     "fullWebglLoad": true,
     "verifiedDesktop": true,
     "verifiedMobilePortrait": true,
-    "verifiedInstances": 95
+    "verifiedInstances": 97
   },
   "blenderReimport": {
     "version": "4.0.2",
@@ -124,10 +124,10 @@
   "sha256": {
     "00-concept-reference.jpg": "fe9f4e16f1eab3e618bae6e1db92fef4897f6a4d8620b09542abebb20e92d320",
     "01-floor-only-map.png": "3cb61dd5871722d53247a2c5ceb09925b467eb7fffdd15e468a9f317dc64a682",
-    "scene-placement.json": "485fb10d7fc0f1a09a5084d26f8d92b4d48fa4cde3d43ec7e4a4f0fca60fa98d",
-    "demo/main.js": "3002b9ffb44ae2fd3f58b799b6d877dcc63c15d8c6ac62dda7643219ad6bce88",
+    "scene-placement.json": "4b9f6511d6807c1088e93c463efe7a401e7d11af0884aefc64703f93af86f483",
+    "demo/main.js": "ddd79c999a760e71ac11a095768e98f953a410cb581a5b87d27f78d4889eaab2",
     "demo/style.css": "465e3dc92d993567eebf799d1f7c3063fda2385c353e75b728984533a947889d",
-    "demo/index.html": "d81e1a060d83fc476e32a03f2d407ae4429dad67955ca820167b31e0a2aab1bf",
+    "demo/index.html": "3a75897bb1e00346d95a49dd8685c82cb74fd29d242829f0233bd1009df9de62",
     "models/03-garden-crystal-shrine.glb": "0800e3402dda1640c0dd35a20e1b153d9912e6d85a2665d2d46548083f63a739",
     "models/04-garden-portal-arch.glb": "20aea08923cc6a321c51a1a0e8e9672d2574be9eab4f24fd1e0151ea0772518b",
     "models/05-garden-main-gate.glb": "dd087029c1254212f00242260d2f3373b02efb5de437f16662ea3048295454b6",

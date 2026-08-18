@@ -402,7 +402,7 @@ function setEffectsVisible(visible) {
 
 async function buildScene() {
   const [placement, floorMap] = await Promise.all([
-    fetch("../scene-placement.json?v=5").then((response) => {
+    fetch("../scene-placement.json?v=11").then((response) => {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
