@@ -1,5 +1,5 @@
 {
-  "version": 11,
+  "version": 17,
   "arena": {
     "width": 16,
     "depth": 9,
@@ -10,79 +10,79 @@
     "crystalShrine": {
       "label": "Central crystal shrine",
       "category": "core",
-      "url": "../models-web/03-garden-crystal-shrine.glb?v=16",
+      "url": "../models-web/03-garden-crystal-shrine.glb?v=17",
       "targetHeight": 1.42
     },
     "portalArch": {
       "label": "Reusable portal arch",
       "category": "core",
-      "url": "../models-web/04-garden-portal-arch.glb?v=16",
+      "url": "../models-web/04-garden-portal-arch.glb?v=17",
       "targetHeight": 1.72
     },
     "mainGate": {
       "label": "Main garden gate",
       "category": "core",
-      "url": "../models-web/05-garden-main-gate.glb?v=16",
+      "url": "../models-web/05-garden-main-gate.glb?v=17",
       "targetHeight": 1.48
     },
     "lanternTower": {
       "label": "Decorative lantern tower",
       "category": "core",
-      "url": "../models-web/06-garden-lantern-tower.glb?v=16",
+      "url": "../models-web/06-garden-lantern-tower.glb?v=17",
       "targetHeight": 1.24
     },
     "emeraldTree": {
       "label": "Emerald canopy tree",
       "category": "environment",
-      "url": "../models-web/07-garden-emerald-canopy-tree.glb?v=16",
+      "url": "../models-web/07-garden-emerald-canopy-tree.glb?v=17",
       "targetHeight": 2.85
     },
     "pinkTree": {
       "label": "Pink blossom tree",
       "category": "environment",
-      "url": "../models-web/08-garden-pink-blossom-tree.glb?v=16",
+      "url": "../models-web/08-garden-pink-blossom-tree.glb?v=17",
       "targetHeight": 2.65
     },
     "tealTree": {
       "label": "Teal dome tree",
       "category": "environment",
-      "url": "../models-web/09-garden-teal-dome-tree.glb?v=16",
+      "url": "../models-web/09-garden-teal-dome-tree.glb?v=17",
       "targetHeight": 2.45
     },
     "gardenPalm": {
       "label": "Garden palm",
       "category": "environment",
-      "url": "../models-web/10-garden-palm.glb?v=16",
+      "url": "../models-web/10-garden-palm.glb?v=17",
       "targetHeight": 2.5
     },
     "flowerBush": {
       "label": "Flower and bush cluster",
       "category": "environment",
-      "url": "../models-web/11-garden-flower-bush-cluster.glb?v=16",
+      "url": "../models-web/11-garden-flower-bush-cluster.glb?v=17",
       "targetHeight": 0.5
     },
     "roundedPlanter": {
       "label": "Rounded pastel garden planter",
       "category": "environment",
-      "url": "../models-web/16-garden-rounded-planter.glb?v=16",
+      "url": "../models-web/16-garden-rounded-planter.glb?v=17",
       "targetHeight": 0.6
     },
     "straightWall": {
       "label": "Straight garden wall",
       "category": "environment",
-      "url": "../models-web/12-garden-straight-wall.glb?v=16",
+      "url": "../models-web/12-garden-straight-wall.glb?v=17",
       "targetHeight": 0.92
     },
     "waterway": {
       "label": "Straight waterway",
       "category": "environment",
-      "url": "../models-web/14-garden-straight-waterway.glb?v=16",
+      "url": "../models-web/14-garden-straight-waterway.glb?v=17",
       "targetHeight": 0.28
     },
     "waterfallCliff": {
       "label": "Waterfall cliff",
       "category": "environment",
-      "url": "../models-web/15-garden-waterfall-cliff.glb?v=16",
+      "url": "../models-web/15-garden-waterfall-cliff.glb?v=17",
       "targetHeight": 1.62
     }
   },
