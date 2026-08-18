@@ -1,9 +1,9 @@
 {
-  "validatedAt": "2026-08-18T13:24:09+09:00",
+  "validatedAt": "2026-08-18T13:43:45+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
-  "resourceStatus": "all 14 GLBs, floor texture and placement JSON loaded successfully",
+  "resourceStatus": "all 13 referenced GLBs, floor texture and placement JSON loaded successfully",
   "floor": "2048x1152 v10 concept-matched grass",
   "floorMaterialValidation": {
     "generation": "five built-in imagegen grass sources using the original concept as style reference",
@@ -23,12 +23,23 @@
       "768": 0.01649
     }
   },
-  "uniqueModels": 14,
-  "layoutVersion": 7,
+  "uniqueModels": 13,
+  "layoutVersion": 8,
   "layoutBasis": "original concept composition and bilateral gameplay symmetry",
-  "instances": 95,
+  "perimeterWallValidation": {
+    "cornerWallModelReferenced": false,
+    "cornerWallInstances": 0,
+    "straightWallInstances": 20,
+    "northRow": { "z": -4.2, "rotationY": 90, "instances": 6 },
+    "southRow": { "z": 4.2, "rotationY": 90, "instances": 6 },
+    "westColumn": { "x": -7.7, "rotationY": 0, "instances": 4 },
+    "eastColumn": { "x": 7.7, "rotationY": 0, "instances": 4 },
+    "allStraightWallRotationsAxisAligned": true,
+    "visualChecks": ["orthographic top view", "desktop match view", "390x844 mobile portrait"]
+  },
+  "instances": 91,
   "coreInstances": 11,
-  "environmentInstances": 84,
+  "environmentInstances": 80,
   "perAssetInstances": {
     "crystalShrine": 1,
     "portalArch": 4,
@@ -41,27 +52,26 @@
     "flowerBush": 20,
     "straightWall": 20,
     "roundedPlanter": 14,
-    "cornerWall": 4,
     "waterway": 11,
     "waterfallCliff": 2
   },
-  "uniqueTriangles": 379898,
-  "renderedTriangles": 2455619,
+  "uniqueTriangles": 355913,
+  "renderedTriangles": 2359679,
   "webOptimization": {
-    "originalModelBytes": 127772844,
-    "optimizedModelBytes": 12700052,
+    "originalModelBytes": 119907384,
+    "optimizedModelBytes": 11894848,
     "transferReductionPercent": 90.1,
     "textureFormat": "WebP",
     "textureResolution": 1024,
-    "estimatedTextureGpuMemoryBeforeMb": 3758.1,
-    "estimatedTextureGpuMemoryAfterMb": 234.8,
+    "estimatedTextureGpuMemoryBeforeMb": 3489.7,
+    "estimatedTextureGpuMemoryAfterMb": 218,
     "mobileLoadingConcurrency": 2,
     "desktopLoadingConcurrency": 4,
     "mobileShadows": true,
     "mobileShadowMode": "static PCFSoftShadowMap plus instanced contact shadows",
     "mobileShadowMapSize": 1024,
     "mobileShadowMapAutoUpdate": false,
-    "mobileContactShadowInstances": 84,
+    "mobileContactShadowInstances": 80,
     "monotonicLoadingProgress": true
   },
   "lightingPolish": {
@@ -87,7 +97,7 @@
     "mobileVisualCheck": true
   },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=12",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=13",
     "hosting": "GitHub Pages",
     "pagesBuildStatus": "built",
     "pageHttpStatus": 200,
@@ -95,7 +105,7 @@
     "fullWebglLoad": true,
     "verifiedDesktop": true,
     "verifiedMobilePortrait": true,
-    "verifiedInstances": 95
+    "verifiedInstances": 91
   },
   "blenderReimport": {
     "version": "4.0.2",
@@ -117,17 +127,16 @@
     "flowerBush": [1.295, 0.5, 1.737],
     "roundedPlanter": [1.226, 0.6, 1.445],
     "straightWall": [1.422, 0.92, 2.404],
-    "cornerWall": [2.382, 0.92, 2.381],
     "waterway": [1.449, 0.28, 1.549],
     "waterfallCliff": [2.698, 1.62, 3.414]
   },
   "sha256": {
     "00-concept-reference.jpg": "fe9f4e16f1eab3e618bae6e1db92fef4897f6a4d8620b09542abebb20e92d320",
     "01-floor-only-map.png": "3cb61dd5871722d53247a2c5ceb09925b467eb7fffdd15e468a9f317dc64a682",
-    "scene-placement.json": "e0aa8ab4cbf2a2369289ca7502f80ef66a6b140aec05288074c1c58a7cdf5fe8",
-    "demo/main.js": "5f97b95e89d1b667833d3c4012a4470785b6a90422f8644c3f8b3e11a8ebcdfe",
+    "scene-placement.json": "28c441d5b44b2fafb95ba4881481542ad2027d500ad71e2c4ad09f86e77b24c7",
+    "demo/main.js": "5ff829e91d7422d8de790ccfbe45c6cb5fdca83a3d3596f76edc7eeaa379e9a5",
     "demo/style.css": "465e3dc92d993567eebf799d1f7c3063fda2385c353e75b728984533a947889d",
-    "demo/index.html": "38d35d3468783d2218f471345cba66be3389a650055f27fb12c3e8a2e77b2c72",
+    "demo/index.html": "ff6c232f8bdf8def0173bc40456275db7700a1e8d5641d25a1e67a53515e4a27",
     "models/03-garden-crystal-shrine.glb": "0800e3402dda1640c0dd35a20e1b153d9912e6d85a2665d2d46548083f63a739",
     "models/04-garden-portal-arch.glb": "20aea08923cc6a321c51a1a0e8e9672d2574be9eab4f24fd1e0151ea0772518b",
     "models/05-garden-main-gate.glb": "dd087029c1254212f00242260d2f3373b02efb5de437f16662ea3048295454b6",
@@ -138,7 +147,6 @@
     "models/10-garden-palm.glb": "e4251f73207ffdddab929d83efa23c4768dbc283e00a74cce2d4fa01276b7e90",
     "models/11-garden-flower-bush-cluster.glb": "2fa0a5e931822064553200ada716567b643c15c66fd9e11538665046e98e2430",
     "models/12-garden-straight-wall.glb": "a31b1d184a1792018e44edb80d7b5f8c15430040fd1ba96f07e54298b4296be7",
-    "models/13-garden-corner-wall.glb": "033e7188f2aae07652a8876a57153a526605863cbf85cc334f5ae27f23c35bb9",
     "models/14-garden-straight-waterway.glb": "bc58e7bb250f13b53e10130ef203e31713a4f44f30ff53c821ca5fb51555bf29",
     "models/15-garden-waterfall-cliff.glb": "dcad7f44fb4c1a3bd096a7006f36669136928ffcd20f4a0667bc9936025ea23e",
     "models/16-garden-rounded-planter.glb": "978c57446cb50b5dd45a90969c2f501f8432137ba804731967a476e774889aae"

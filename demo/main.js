@@ -185,7 +185,6 @@ function countTriangles(root) {
 
 const materialTuningByAsset = {
   straightWall: { emissiveLift: 0.28, maxMetalness: 0, minRoughness: 0.82 },
-  cornerWall: { emissiveLift: 0.28, maxMetalness: 0, minRoughness: 0.82 },
   flowerBush: { emissiveLift: 0.13, maxMetalness: 0.04, minRoughness: 0.76 },
   roundedPlanter: { emissiveLift: 0.13, maxMetalness: 0.02, minRoughness: 0.74 },
 };
@@ -402,7 +401,7 @@ function setEffectsVisible(visible) {
 
 async function buildScene() {
   const [placement, floorMap] = await Promise.all([
-    fetch("../scene-placement.json?v=12").then((response) => {
+    fetch("../scene-placement.json?v=13").then((response) => {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
