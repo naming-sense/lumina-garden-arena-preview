@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-18T22:23:00+09:00",
+  "validatedAt": "2026-08-18T22:38:00+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
@@ -34,7 +34,7 @@
     "instanceScale": [2.85, 1, 1.25],
     "webTextureResolution": "1024x1024",
     "localAxis": "Y-up; root quaternion identity",
-    "integration": "aligned to the live map outline around the existing gate, portal, waterway and waterfall composition without moving gameplay placements",
+    "integration": "v27: gates are aligned inside the north/south frame faces and waterfalls sit above the west/east frame faces; gameplay-space interior remains unchanged",
     "visualChecks": ["orthographic top view", "desktop match view", "390x844 mobile portrait"]
   },
   "allGlbLocalAxisValidation": {
@@ -235,7 +235,7 @@
     "keyIntensity": 2.3,
     "fillIntensity": 0.82,
     "frontFillIntensity": 0.38,
-    "texturedMaterialAmbientLift": 0.045,
+    "texturedMaterialAmbientLift": "neutral white map lift; no warm cream multiply",
     "floorAmbientLift": 0,
     "floorSaturation": 0.9,
     "perimeterFrameAmbientLift": 0.18,
@@ -248,10 +248,19 @@
     "desktopVisualCheck": true,
     "mobileVisualCheck": true
   },
+  "axisAndColorCorrectionV27": {
+    "mainGateRootQuaternion": [0, 0, 0, 1],
+    "waterfallCliffRootQuaternion": [0, 0, 0, 1],
+    "gateWorldPlacement": { "north": [0, 0, -4.05], "south": [0, 0, 4.05], "yawDegrees": [-90, 90] },
+    "waterfallWorldPlacement": { "west": [-9.3, 0.82, 0], "east": [9.3, 0.82, 0], "yawDegrees": [90, -90] },
+    "worldYawRationale": "GLB local axes stay identity; scene Yaw only faces each model toward its matching frame edge.",
+    "levelColorMatch": "warm cream emissive tint removed; textured materials now use neutral white lift",
+    "pinkBlossomCorrection": "shader mask adjusts blossom reds to concept-matched deep magenta without recoloring trunk or leaves"
+  },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=26",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=27",
     "hosting": "GitHub Pages",
-    "pagesBuildStatus": "pending v26 deployment",
+    "pagesBuildStatus": "pending v27 deployment",
     "pageHttpStatus": null,
     "placementHttpStatus": null,
     "fullWebglLoad": false,

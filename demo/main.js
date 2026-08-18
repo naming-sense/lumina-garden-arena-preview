@@ -236,10 +236,29 @@ function renderTriangleBreakdown(rows, uniqueTriangles, renderedTriangles) {
 
 const materialTuningByAsset = {
   perimeterFrame: { emissiveLift: 0.18, maxMetalness: 0, minRoughness: 0.78 },
+  pinkTree: { emissiveLift: 0, maxMetalness: 0.04, minRoughness: 0.7 },
   flowerBush: { emissiveLift: 0.13, maxMetalness: 0.04, minRoughness: 0.76 },
   roundedPlanter: { emissiveLift: 0.13, maxMetalness: 0.02, minRoughness: 0.74 },
 };
 const mobileShadowExcludedAssets = new Set(["waterway", "perimeterFrame"]);
+
+function correctPinkBlossomHue(material) {
+  material.onBeforeCompile = (shader) => {
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <map_fragment>",
+      `#include <map_fragment>
+       float pinkBlossomMask = smoothstep(0.18, 0.44, diffuseColor.r - max(diffuseColor.g, diffuseColor.b))
+         * smoothstep(0.50, 0.76, diffuseColor.r);
+       vec3 deepMagenta = vec3(
+         diffuseColor.r * 0.90,
+         diffuseColor.g * 0.26,
+         max(diffuseColor.b * 0.70, diffuseColor.r * 0.45)
+       );
+       diffuseColor.rgb = mix(diffuseColor.rgb, deepMagenta, pinkBlossomMask * 0.92);`,
+    );
+  };
+  material.customProgramCacheKey = () => "pink-blossom-deep-magenta-v1";
+}
 
 function prepareTemplate(gltfScene, targetHeight, assetKey) {
   const model = gltfScene;
@@ -276,9 +295,16 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
         material.roughness = Math.max(material.roughness, tuning.minRoughness);
       }
       if ((material.isMeshStandardMaterial || material.isMeshPhysicalMaterial) && material.map) {
-        material.emissive.set(0xfff4e8);
-        material.emissiveMap = material.map;
-        material.emissiveIntensity = tuning.emissiveLift;
+        if (assetKey === "pinkTree") {
+          correctPinkBlossomHue(material);
+          material.emissive.set(0x000000);
+          material.emissiveMap = null;
+          material.emissiveIntensity = 0;
+        } else {
+          material.emissive.set(0xffffff);
+          material.emissiveMap = material.map;
+          material.emissiveIntensity = tuning.emissiveLift;
+        }
       }
       material.needsUpdate = true;
     }

@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v26
+# Garden Arena Reference-Matched Placement · Three.js v27
 
 원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 장면의 Tripo GLB 14종에 남아 있던 숨은 로컬 회전을 모두 제거하고 삼각형 진단 도구를 추가한 v16 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=26>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=27>
 
 ## 장면 구성
 
@@ -31,7 +31,9 @@
 
 `position`은 `[x, y, z]`, `rotationY`는 degree, `scale`은 선택적 인스턴스 배율이다. 바닥 범위는 X `-8..8`, Z `-4.5..4.5`이며 이미지 상단이 음수 Z다. `targetHeight`를 바꾸면 GLB가 bottom-center 피벗을 기준으로 자동 정규화된다.
 
-v26의 `perimeterFrame`은 액자 프레임 원본 모델의 비율을 실제 라이브 맵 외곽 X `18.59`, Z `10.66`에 맞추기 위해 `scale: [x, y, z]`를 사용한다. 이 배열형 스케일은 정규화된 템플릿 스케일에 곱해져 원본 높이를 유지한다.
+v27의 `perimeterFrame`은 액자 프레임 원본 모델의 비율을 실제 라이브 맵 외곽 X `18.59`, Z `10.66`에 맞추기 위해 `scale: [x, y, z]`를 사용한다. 상·하단 게이트는 프레임 안쪽 Z `±4.05`에, 좌우 폭포는 프레임 상단 X `±9.3`, Y `0.82`에 정렬했다. 게이트·폭포 GLB 루트는 identity quaternion을 유지하며, 이들의 월드 Yaw는 각각 상하·좌우 프레임 면을 향하도록 배치 데이터에서만 사용한다.
+
+v27은 레벨에서만 적용하던 크림색 emissive 곱셈을 중립 백색으로 바꿔 모델 프리뷰와 실시간 레벨의 색감 차이를 없앴다. 핑크 나무의 꽃잎은 원화 기준 진분홍 마젠타로 보정하되, 줄기·잎·그림자 색은 그대로 유지한다.
 
 ## 실행
 

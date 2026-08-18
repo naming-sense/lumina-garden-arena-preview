@@ -1,5 +1,5 @@
 {
-  "version": 26,
+  "version": 27,
   "arena": {
     "width": 16,
     "depth": 9,
@@ -70,7 +70,7 @@
     "perimeterFrame": {
       "label": "Single-piece garden perimeter frame",
       "category": "environment",
-      "url": "../models-web/17-garden-perimeter-frame.glb?v=26",
+      "url": "../models-web/17-garden-perimeter-frame.glb?v=27",
       "targetHeight": 0.92
     },
     "waterway": {
@@ -92,8 +92,8 @@
     { "id": "portal-left-south", "asset": "portalArch", "team": "cyan", "position": [-7.05, 0, 1.02], "rotationY": 0 },
     { "id": "portal-right-north", "asset": "portalArch", "team": "purple", "position": [7.05, 0, -1.16], "rotationY": 180 },
     { "id": "portal-right-south", "asset": "portalArch", "team": "purple", "position": [7.05, 0, 1.02], "rotationY": 180 },
-    { "id": "gate-north", "asset": "mainGate", "position": [0, 0, -4.38], "rotationY": -90, "scale": 1.02 },
-    { "id": "gate-south", "asset": "mainGate", "position": [0, 0, 4.62], "rotationY": 90, "scale": 0.9 },
+    { "id": "gate-north", "asset": "mainGate", "position": [0, 0, -4.05], "rotationY": -90, "scale": 1.02 },
+    { "id": "gate-south", "asset": "mainGate", "position": [0, 0, 4.05], "rotationY": 90, "scale": 0.9 },
     { "id": "tower-northwest", "asset": "lanternTower", "position": [-5.38, 0, -3.68], "rotationY": 8 },
     { "id": "tower-northeast", "asset": "lanternTower", "position": [5.38, 0, -3.68], "rotationY": -8 },
     { "id": "tower-southwest", "asset": "lanternTower", "position": [-5.92, 0, 3.72], "rotationY": -8 },
@@ -163,7 +163,7 @@
     { "id": "waterway-west", "asset": "waterway", "position": [-8.48, -0.02, 0], "rotationY": 0, "scale": 0.82 },
     { "id": "waterway-east", "asset": "waterway", "position": [8.48, -0.02, 0], "rotationY": 0, "scale": 0.82 },
 
-    { "id": "waterfall-west", "asset": "waterfallCliff", "position": [-8.72, 0, -0.08], "rotationY": 90, "scale": 0.62 },
-    { "id": "waterfall-east", "asset": "waterfallCliff", "position": [8.72, 0, -0.08], "rotationY": -90, "scale": 0.62 }
+    { "id": "waterfall-west", "asset": "waterfallCliff", "position": [-9.3, 0.82, 0], "rotationY": 90, "scale": 0.62 },
+    { "id": "waterfall-east", "asset": "waterfallCliff", "position": [9.3, 0.82, 0], "rotationY": -90, "scale": 0.62 }
   ]
 }
