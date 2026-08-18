@@ -187,6 +187,7 @@ const materialTuningByAsset = {
   straightWall: { emissiveLift: 0.42, maxMetalness: 0, minRoughness: 0.82 },
   cornerWall: { emissiveLift: 0.42, maxMetalness: 0, minRoughness: 0.82 },
   flowerBush: { emissiveLift: 0.2, maxMetalness: 0.04, minRoughness: 0.76 },
+  roundedPlanter: { emissiveLift: 0.24, maxMetalness: 0.02, minRoughness: 0.74 },
 };
 const mobileShadowExcludedAssets = new Set(["waterway"]);
 
@@ -401,7 +402,7 @@ function setEffectsVisible(visible) {
 
 async function buildScene() {
   const [placement, floorMap] = await Promise.all([
-    fetch("../scene-placement.json?v=4").then((response) => {
+    fetch("../scene-placement.json?v=5").then((response) => {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
@@ -502,7 +503,8 @@ async function buildScene() {
     toneMappingExposure: renderer.toneMappingExposure,
     floorSaturation,
     texturedMaterialAmbientLift: 0.075,
-    planterAmbientLift: 0.42,
+    perimeterWallAmbientLift: 0.42,
+    roundedPlanterAmbientLift: 0.24,
     naturalMaterialMaxMetalness: 0.12,
     shadowMode: isConstrainedDevice ? "static-PCFSoftShadowMap+contact" : "PCFSoftShadowMap",
     shadowMapSize: isConstrainedDevice ? 1024 : 2048,

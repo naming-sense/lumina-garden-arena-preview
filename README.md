@@ -1,26 +1,26 @@
-# Garden Arena Reference-Matched Placement · Three.js v8
+# Garden Arena Reference-Matched Placement · Three.js v9
 
 `garden-arena-flooronly-threejs-v8` 바닥 위의 Tripo 메시를 원화 구도에 맞춰 다시 배치한 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=8>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=9>
 
 ## 장면 구성
 
 - 핵심: 크리스탈 제단 1, 포탈 4, 상·하단 게이트 2, 랜턴탑 4
 - 식생: 큰 나무 7, 야자수 6, 꽃·덤불 클러스터 20
-- 담장/엄폐: 직선 담장 34, 코너 담장 4
+- 담장/엄폐: 외곽 직선 담장 20, 코너 담장 4, 둥근 파스텔 화단 14
 - 수경: 직선 수로 11, 측면 폭포·절벽 2
-- 고유 GLB 13개, 총 인스턴스 95개
+- 고유 GLB 14개, 총 인스턴스 95개
 
-직선 담장 메시의 축소 인스턴스를 원화의 내부 엄폐물 자리에도 배치해 현재 키트만으로 플레이 구도를 읽을 수 있게 했다. 위치·Y축 회전·개별 스케일은 `scene-placement.json`에 분리되어 있다.
+내부 엄폐물로 임시 사용하던 직선 담장 `cover-*` 14개를 전부 제거하고, 승인된 새 원화에서 생성한 짧고 둥근 파스텔 화단 14개로 교체했다. 외곽 담장은 맵 경계 구조물이므로 유지했다. 위치·Y축 회전·개별 스케일은 `scene-placement.json`에 분리되어 있다.
 
 ## 주요 파일
 
 - `00-concept-reference.jpg` — 배치 기준 원화
 - `01-floor-only-map.png` — v8 완성 바닥, 2048×1152
 - `02-tilemap-occupancy-160x90.json` — 기존 게임 판정 타일맵
-- `models/*.glb` — 텍스처가 내장된 Tripo 메시 13종
-- `models-web/*.glb` — 원본 메시를 보존하면서 텍스처를 1024px WebP로 줄인 웹 전용 GLB 13종
+- `models/*.glb` — 텍스처가 내장된 Tripo 메시 14종
+- `models-web/*.glb` — 원본 메시를 보존하면서 텍스처를 1024px WebP로 줄인 웹 전용 GLB 14종
 - `scene-placement.json` — 모델 URL, 정규화 높이, 인스턴스 배치 데이터
 - `demo/` — CDN 없이 실행되는 Three.js r180 데모
 - `garden-arena-environment-placement-v3-preview.png` — Chrome WebGL Match view 렌더
@@ -42,12 +42,14 @@ python3 -m http.server 8795
 
 ## 성능 주의
 
-실제 Chrome WebGL에서 13개 GLB와 95개 인스턴스, 2,452,063 rendered triangles를 확인했다. 현재 장면은 고품질 배치 프리뷰다. 모바일 게임 투입 전에는 환경 에셋 리토폴로지/LOD, 반복 담장 인스턴싱, 단순 충돌체, 수로·폭포 전용 애니메이션 셰이더를 적용한다.
+실제 Chrome WebGL에서 14개 GLB와 95개 인스턴스, 2,455,619 rendered triangles를 확인했다. 현재 장면은 고품질 배치 프리뷰다. 모바일 게임 투입 전에는 환경 에셋 리토폴로지/LOD, 반복 담장 인스턴싱, 단순 충돌체, 수로·폭포 전용 애니메이션 셰이더를 적용한다.
 
-웹 프리뷰는 원본 4K 텍스처 GLB 118.5MB 대신 1024px WebP GLB 11.8MB를 로드한다. 예상 텍스처 GPU 메모리는 약 3.49GB에서 218MB로 줄었고, 모바일에서는 모델을 2개씩 로드하며 안티앨리어싱과 고해상도 픽셀 비율을 비활성화한다. 그림자는 1024px 섀도맵을 최초 한 번만 계산하고 이후 고정하며, 로딩 퍼센트는 내부 요청 수가 늘어나도 뒤로 되돌아가지 않는다.
+웹 프리뷰는 원본 4K 텍스처 GLB 127.8MB 대신 1024px WebP GLB 12.7MB를 로드한다. 예상 텍스처 GPU 메모리는 약 3.76GB에서 235MB로 줄었고, 모바일에서는 모델을 2개씩 로드하며 안티앨리어싱과 고해상도 픽셀 비율을 비활성화한다. 그림자는 1024px 섀도맵을 최초 한 번만 계산하고 이후 고정하며, 로딩 퍼센트는 내부 요청 수가 늘어나도 뒤로 되돌아가지 않는다.
 
 ## 밝기 폴리싱
 
 v7은 Neutral tone mapping, 따뜻한 키라이트와 청록 필라이트, 반구광·전면 보조광을 유지하면서 톤을 다시 균형화했다. 바닥의 인위적 발광을 제거하고 채도를 72%로 제한했으며, 중앙 화단·담장은 금속도를 제거하고 0.42 강도의 간접광을 별도로 적용해 바닥보다 어둡게 꺼지지 않도록 했다. 꽃덤불도 동일한 방향으로 더 약하게 보정했다.
 
 v8은 데스크톱의 PCF 소프트 섀도맵을 유지하면서 모바일 경량 모드에도 1024px PCF 섀도맵과 소프트 접지 그림자를 추가했다. 모바일 섀도맵은 모든 오브젝트가 로드된 뒤 한 번만 계산해 고정하며, 수로를 제외한 84개 오브젝트의 접지 그림자는 카테고리별 `InstancedMesh` 두 번의 드로우콜로 처리한다. 카메라를 움직일 때는 섀도맵을 다시 계산하지 않는다.
+
+v9은 내부의 길쭉한 직선 담장 화단 14개를 모두 삭제하고 `16-garden-rounded-planter`로 교체했다. 새 화단은 0.6 높이 기준으로 정규화하고 위치별 0.68–0.90 배율을 사용해, 원화처럼 짧고 두꺼운 캡슐 실루엣과 파스텔 크림·라벤더·아쿠아 색을 유지한다. 웹 GLB는 4096px 텍스처를 1024px WebP로 줄여 9.27MB에서 0.86MB로 경량화했다.
