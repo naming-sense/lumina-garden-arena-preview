@@ -29,7 +29,7 @@ renderer.setPixelRatio(isConstrainedDevice ? 1 : Math.min(window.devicePixelRati
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NeutralToneMapping;
-renderer.toneMappingExposure = 1.08;
+renderer.toneMappingExposure = 0.99;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.autoUpdate = !isConstrainedDevice;
@@ -80,13 +80,13 @@ function setCameraView(name) {
 
 setCameraView(params.get("view") === "top" ? "top" : "overview");
 
-const ambient = new THREE.AmbientLight(0xfff7e8, 0.32);
+const ambient = new THREE.AmbientLight(0xfff7e8, 0.3);
 scene.add(ambient);
 
-const hemisphere = new THREE.HemisphereLight(0xf4fffb, 0x91bd7c, 1.72);
+const hemisphere = new THREE.HemisphereLight(0xf4fffb, 0x91bd7c, 1.56);
 scene.add(hemisphere);
 
-const keyLight = new THREE.DirectionalLight(0xffefd2, 2.55);
+const keyLight = new THREE.DirectionalLight(0xffefd2, 2.3);
 keyLight.position.set(-6, 13, 8);
 keyLight.castShadow = true;
 keyLight.shadow.mapSize.set(isConstrainedDevice ? 1024 : 2048, isConstrainedDevice ? 1024 : 2048);
@@ -100,11 +100,11 @@ keyLight.shadow.bias = -0.00018;
 keyLight.shadow.normalBias = 0.022;
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0x9beaff, 0.96);
+const fillLight = new THREE.DirectionalLight(0x9beaff, 0.82);
 fillLight.position.set(7, 7, -8);
 scene.add(fillLight);
 
-const frontFill = new THREE.DirectionalLight(0xffd9bd, 0.48);
+const frontFill = new THREE.DirectionalLight(0xffd9bd, 0.38);
 frontFill.position.set(0, 5, 10);
 scene.add(frontFill);
 
@@ -184,17 +184,17 @@ function countTriangles(root) {
 }
 
 const materialTuningByAsset = {
-  straightWall: { emissiveLift: 0.42, maxMetalness: 0, minRoughness: 0.82 },
-  cornerWall: { emissiveLift: 0.42, maxMetalness: 0, minRoughness: 0.82 },
-  flowerBush: { emissiveLift: 0.2, maxMetalness: 0.04, minRoughness: 0.76 },
-  roundedPlanter: { emissiveLift: 0.24, maxMetalness: 0.02, minRoughness: 0.74 },
+  straightWall: { emissiveLift: 0.28, maxMetalness: 0, minRoughness: 0.82 },
+  cornerWall: { emissiveLift: 0.28, maxMetalness: 0, minRoughness: 0.82 },
+  flowerBush: { emissiveLift: 0.13, maxMetalness: 0.04, minRoughness: 0.76 },
+  roundedPlanter: { emissiveLift: 0.13, maxMetalness: 0.02, minRoughness: 0.74 },
 };
 const mobileShadowExcludedAssets = new Set(["waterway"]);
 
 function prepareTemplate(gltfScene, targetHeight, assetKey) {
   const model = gltfScene;
   const tuning = materialTuningByAsset[assetKey] ?? {
-    emissiveLift: 0.075,
+    emissiveLift: 0.045,
     maxMetalness: 0.12,
     minRoughness: 0.66,
   };
@@ -406,7 +406,7 @@ async function buildScene() {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
-    textureLoader.loadAsync("../01-floor-only-map.png?v=4"),
+    textureLoader.loadAsync("../01-floor-only-map.png?v=10"),
   ]);
 
   floorMap.colorSpace = THREE.SRGBColorSpace;
@@ -433,7 +433,7 @@ async function buildScene() {
     roughness: 0.94,
     metalness: 0,
   });
-  const floorSaturation = 0.72;
+  const floorSaturation = 0.9;
   floorMaterial.onBeforeCompile = (shader) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <color_fragment>",
@@ -495,16 +495,16 @@ async function buildScene() {
   );
   const report = {
     ready: true,
-    floor: "2048x1152 v8",
+    floor: "2048x1152 v10 concept-matched grass",
     webOptimized: true,
     textureResolution: 1024,
-    lightingPreset: "bright-garden-v2-balanced",
+    lightingPreset: "pastel-garden-v3-muted",
     toneMapping: "Neutral",
     toneMappingExposure: renderer.toneMappingExposure,
     floorSaturation,
-    texturedMaterialAmbientLift: 0.075,
-    perimeterWallAmbientLift: 0.42,
-    roundedPlanterAmbientLift: 0.24,
+    texturedMaterialAmbientLift: 0.045,
+    perimeterWallAmbientLift: 0.28,
+    roundedPlanterAmbientLift: 0.13,
     naturalMaterialMaxMetalness: 0.12,
     shadowMode: isConstrainedDevice ? "static-PCFSoftShadowMap+contact" : "PCFSoftShadowMap",
     shadowMapSize: isConstrainedDevice ? 1024 : 2048,

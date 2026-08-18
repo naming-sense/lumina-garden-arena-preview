@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v9
+# Garden Arena Reference-Matched Placement · Three.js v10
 
-`garden-arena-flooronly-threejs-v8` 바닥 위의 Tripo 메시를 원화 구도에 맞춰 다시 배치한 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
+원화의 잔디 재질과 전체 명도를 다시 맞춘 v10 바닥 위에 Tripo 메시를 배치한 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=9>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=10>
 
 ## 장면 구성
 
@@ -17,7 +17,7 @@
 ## 주요 파일
 
 - `00-concept-reference.jpg` — 배치 기준 원화
-- `01-floor-only-map.png` — v8 완성 바닥, 2048×1152
+- `01-floor-only-map.png` — v10 원화형 잔디 완성 바닥, 2048×1152
 - `02-tilemap-occupancy-160x90.json` — 기존 게임 판정 타일맵
 - `models/*.glb` — 텍스처가 내장된 Tripo 메시 14종
 - `models-web/*.glb` — 원본 메시를 보존하면서 텍스처를 1024px WebP로 줄인 웹 전용 GLB 14종
@@ -53,3 +53,5 @@ v7은 Neutral tone mapping, 따뜻한 키라이트와 청록 필라이트, 반�
 v8은 데스크톱의 PCF 소프트 섀도맵을 유지하면서 모바일 경량 모드에도 1024px PCF 섀도맵과 소프트 접지 그림자를 추가했다. 모바일 섀도맵은 모든 오브젝트가 로드된 뒤 한 번만 계산해 고정하며, 수로를 제외한 84개 오브젝트의 접지 그림자는 카테고리별 `InstancedMesh` 두 번의 드로우콜로 처리한다. 카메라를 움직일 때는 섀도맵을 다시 계산하지 않는다.
 
 v9은 내부의 길쭉한 직선 담장 화단 14개를 모두 삭제하고 `16-garden-rounded-planter`로 교체했다. 새 화단은 0.6 높이 기준으로 정규화하고 위치별 0.68–0.90 배율을 사용해, 원화처럼 짧고 두꺼운 캡슐 실루엣과 파스텔 크림·라벤더·아쿠아 색을 유지한다. 웹 GLB는 4096px 텍스처를 1024px WebP로 줄여 9.27MB에서 0.86MB로 경량화했다.
+
+v10은 잔디만 원화의 재질 언어로 다시 만들었다. 큰 불규칙 잔디 패널, 얇고 낮은 대비의 녹색 이음선, 드문 둥근 잎과 짧은 풀잎을 네 가지 풀 알베도에 보존한 뒤 불규칙 영역으로 섞었다. 길 마스크·160×90 판정·석재 텍스처는 이전 승인본과 바이트 단위로 동일하다. 톤 매핑 노출과 키·필·반구광을 소폭 낮추고, 화단·담장·꽃덤불의 발광 보정을 줄여 파스텔 색은 남기면서 과하게 뜨는 부분을 눌렀다.
