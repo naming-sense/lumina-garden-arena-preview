@@ -89,16 +89,16 @@
     "waterway": 11,
     "waterfallCliff": 2
   },
-  "uniqueTriangles": 162395,
-  "renderedTriangles": 578271,
+  "uniqueTriangles": 158648,
+  "renderedTriangles": 525813,
   "triangleDiagnostics": {
     "metric": "sum of Tripo mesh triangles multiplied by scene instance count",
     "excludes": ["floor", "portal and shrine glow geometry", "contact shadows", "shadow-map pass"],
-    "uniqueToRenderedMultiplier": 3.56,
-    "topFourRenderedTriangles": 295338,
-    "topFourSharePercent": 51.1,
+    "uniqueToRenderedMultiplier": 3.31,
+    "topFourRenderedTriangles": 250842,
+    "topFourSharePercent": 47.7,
     "breakdown": [
-      { "asset": "roundedPlanter", "uniqueTriangles": 6789, "instances": 14, "renderedTriangles": 95046, "sharePercent": 16.0 },
+      { "asset": "roundedPlanter", "uniqueTriangles": 3042, "instances": 14, "renderedTriangles": 42588, "sharePercent": 8.1 },
       { "asset": "flowerBush", "uniqueTriangles": 4483, "instances": 20, "renderedTriangles": 89660, "sharePercent": 15.1 },
       { "asset": "straightWall", "uniqueTriangles": 1790, "instances": 20, "renderedTriangles": 35800, "sharePercent": 6.0 },
       { "asset": "waterway", "uniqueTriangles": 2230, "instances": 11, "renderedTriangles": 24530, "sharePercent": 4.1 },
@@ -155,6 +155,16 @@
     "tripoRegenerationUsed": false,
     "localReimport": { "modelValid": true, "placementTransformsPreserved": true }
   },
+  "tripoLowpolyV1Integration": {
+    "asset": "roundedPlanter",
+    "reason": "approved Tripo Smart LowPoly review candidate despite the weaker center texture",
+    "replaced": { "before": 6789, "after": 3042, "instances": 14 },
+    "method": "Tripo highpoly_to_lowpoly (face_limit 2000, quad false, bake true)",
+    "tripoTaskId": "5e19609c-4eaf-423c-9a02-9843479892ac",
+    "sourceBackup": "models-web/source-pre-tripo-lowpoly-v21/",
+    "tripoRegenerationUsed": true,
+    "localReimport": { "modelValid": true, "placementTransformsPreserved": true }
+  },
   "wireframeValidation": {
     "available": true,
     "shadedToWireframeButton": true,
@@ -206,7 +216,7 @@
     "mobileVisualCheck": true
   },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=20",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=21",
     "hosting": "GitHub Pages",
     "pagesBuildStatus": "pending",
     "pageHttpStatus": null,
@@ -259,6 +269,6 @@
     "models-web/13-garden-corner-wall.glb": "3802638377f1eba3b89105654f926bbc2535e9132634f4ead147c59fe19fc362",
     "models-web/14-garden-straight-waterway.glb": "2fbdffbae18eb02bc4c05999d3a1b50025aacdb1243534517448c43d81803c40",
     "models-web/15-garden-waterfall-cliff.glb": "5a8febfcbdc5e7d3044f49c8534dd193863e230022c9247a59951e21f6c51976",
-    "models-web/16-garden-rounded-planter.glb": "c1f5d6d2d7d9b81f903ffefde8aec2ff0271cc206c92e22f1d9840e1d57fae1e"
+    "models-web/16-garden-rounded-planter.glb": "f9c1f168c05323ce8dae1ed20bf9347f001eca73909b7957ef14b23d0cb7e33c"
   }
 }
