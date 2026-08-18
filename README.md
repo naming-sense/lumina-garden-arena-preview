@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v22
+# Garden Arena Reference-Matched Placement · Three.js v23
 
 원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 장면의 Tripo GLB 14종에 남아 있던 숨은 로컬 회전을 모두 제거하고 삼각형 진단 도구를 추가한 v16 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=22>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=23>
 
 ## 장면 구성
 
