@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-18T16:59:00+09:00",
+  "validatedAt": "2026-08-18T21:38:00+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
@@ -89,28 +89,28 @@
     "waterway": 11,
     "waterfallCliff": 2
   },
-  "uniqueTriangles": 94491,
-  "renderedTriangles": 417154,
+  "uniqueTriangles": 71205,
+  "renderedTriangles": 352534,
   "triangleDiagnostics": {
     "metric": "sum of Tripo mesh triangles multiplied by scene instance count",
     "excludes": ["floor", "portal and shrine glow geometry", "contact shadows", "shadow-map pass"],
-    "uniqueToRenderedMultiplier": 4.41,
-    "topFourRenderedTriangles": 228618,
-    "topFourSharePercent": 54.8,
+    "uniqueToRenderedMultiplier": 4.95,
+    "topFourRenderedTriangles": 200148,
+    "topFourSharePercent": 56.8,
     "breakdown": [
-      { "asset": "roundedPlanter", "uniqueTriangles": 3042, "instances": 14, "renderedTriangles": 42588, "sharePercent": 10.2 },
-      { "asset": "flowerBush", "uniqueTriangles": 4483, "instances": 20, "renderedTriangles": 89660, "sharePercent": 21.5 },
-      { "asset": "straightWall", "uniqueTriangles": 1790, "instances": 20, "renderedTriangles": 35800, "sharePercent": 8.6 },
-      { "asset": "waterway", "uniqueTriangles": 2230, "instances": 11, "renderedTriangles": 24530, "sharePercent": 5.9 },
-      { "asset": "gardenPalm", "uniqueTriangles": 8425, "instances": 6, "renderedTriangles": 50550, "sharePercent": 12.1 },
-      { "asset": "emeraldTree", "uniqueTriangles": 16050, "instances": 2, "renderedTriangles": 32100, "sharePercent": 7.7 },
-      { "asset": "pinkTree", "uniqueTriangles": 8409, "instances": 3, "renderedTriangles": 25227, "sharePercent": 6.0 },
-      { "asset": "portalArch", "uniqueTriangles": 5657, "instances": 4, "renderedTriangles": 22628, "sharePercent": 5.4 },
-      { "asset": "lanternTower", "uniqueTriangles": 5314, "instances": 4, "renderedTriangles": 21256, "sharePercent": 5.1 },
-      { "asset": "waterfallCliff", "uniqueTriangles": 3852, "instances": 2, "renderedTriangles": 7704, "sharePercent": 1.8 },
-      { "asset": "tealTree", "uniqueTriangles": 6962, "instances": 2, "renderedTriangles": 13924, "sharePercent": 3.3 },
-      { "asset": "mainGate", "uniqueTriangles": 22910, "instances": 2, "renderedTriangles": 45820, "sharePercent": 11.0 },
-      { "asset": "crystalShrine", "uniqueTriangles": 5367, "instances": 1, "renderedTriangles": 5367, "sharePercent": 1.3 }
+      { "asset": "roundedPlanter", "uniqueTriangles": 3042, "instances": 14, "renderedTriangles": 42588, "sharePercent": 12.1 },
+      { "asset": "flowerBush", "uniqueTriangles": 4483, "instances": 20, "renderedTriangles": 89660, "sharePercent": 25.4 },
+      { "asset": "straightWall", "uniqueTriangles": 1790, "instances": 20, "renderedTriangles": 35800, "sharePercent": 10.2 },
+      { "asset": "waterway", "uniqueTriangles": 2230, "instances": 11, "renderedTriangles": 24530, "sharePercent": 7.0 },
+      { "asset": "gardenPalm", "uniqueTriangles": 3913, "instances": 6, "renderedTriangles": 23478, "sharePercent": 6.7 },
+      { "asset": "emeraldTree", "uniqueTriangles": 16050, "instances": 2, "renderedTriangles": 32100, "sharePercent": 9.1 },
+      { "asset": "pinkTree", "uniqueTriangles": 8409, "instances": 3, "renderedTriangles": 25227, "sharePercent": 7.2 },
+      { "asset": "portalArch", "uniqueTriangles": 5657, "instances": 4, "renderedTriangles": 22628, "sharePercent": 6.4 },
+      { "asset": "lanternTower", "uniqueTriangles": 5314, "instances": 4, "renderedTriangles": 21256, "sharePercent": 6.0 },
+      { "asset": "waterfallCliff", "uniqueTriangles": 3852, "instances": 2, "renderedTriangles": 7704, "sharePercent": 2.2 },
+      { "asset": "tealTree", "uniqueTriangles": 6962, "instances": 2, "renderedTriangles": 13924, "sharePercent": 4.0 },
+      { "asset": "mainGate", "uniqueTriangles": 4136, "instances": 2, "renderedTriangles": 8272, "sharePercent": 2.3 },
+      { "asset": "crystalShrine", "uniqueTriangles": 5367, "instances": 1, "renderedTriangles": 5367, "sharePercent": 1.5 }
     ]
   },
   "retopoR2Integration": {
@@ -183,6 +183,16 @@
     "sourceBackup": "models-web/source-pre-tripo-lowpoly-v23/",
     "tripoRegenerationUsed": true,
     "localReimport": { "modelValid": true, "placementTransformsPreserved": true }
+  },
+  "tripoLowpolyV1PalmAndGateIntegration": {
+    "assets": {
+      "gardenPalm": { "before": 8425, "after": 3913, "instances": 6, "requestedFaceLimit": 2000, "taskId": "720d3b7d-ef39-4864-aaa7-ae4e7140b5b3" },
+      "mainGate": { "before": 22910, "after": 4136, "instances": 2, "requestedFaceLimit": 3000, "taskId": "8f99ef4f-7355-463a-ad5a-ed4482bed113", "widthIncreasePercent": 111.4, "approvedWithScaleUnchanged": true }
+    },
+    "method": "Tripo highpoly_to_lowpoly (quad false, bake true)",
+    "sourceBackup": "models-web/source-pre-tripo-lowpoly-v24/",
+    "tripoRegenerationUsed": true,
+    "localReimport": { "allModelsValid": true, "placementTransformsPreserved": true }
   },
   "wireframeValidation": {
     "available": true,
@@ -271,18 +281,18 @@
   "sha256": {
     "00-concept-reference.jpg": "fe9f4e16f1eab3e618bae6e1db92fef4897f6a4d8620b09542abebb20e92d320",
     "01-floor-only-map.png": "3cb61dd5871722d53247a2c5ceb09925b467eb7fffdd15e468a9f317dc64a682",
-    "scene-placement.json": "2e37ebbb05df9636b40195a1a81cc5b4546b0be45afbe66cc54a94f31cc1c50d",
+    "scene-placement.json": "3dd4826fabb33c4639acad43ec78a20dbdb40c8c2e6f257aa2b024ad6bfa3f9a",
     "demo/main.js": "fc36dc7ccb71b3d2242d45340de3911cf8fc81623d0891d50d6e87c6530384c0",
     "demo/style.css": "0b3b5b6bbaae7d61b7fa222ed33761f80d7d8808a4c9920752c1c620fd43627a",
     "demo/index.html": "5a9d4a0583b668f914a389f28c48dcfa0adc4e1e4030fec1a926c9ec31fcad40",
     "models-web/03-garden-crystal-shrine.glb": "96ee1b16317be44544e0f6825ec8f7453988788d6adf41940df7d3da09dd53a5",
     "models-web/04-garden-portal-arch.glb": "3c183a0885b6e8b7488753eac8865c43f068cdf119a236badc31adba46762a8c",
-    "models-web/05-garden-main-gate.glb": "0f62d870864ca744a2db7298671596fba0890992194ffcd0eebcd61dac941b1c",
+    "models-web/05-garden-main-gate.glb": "ac2b7399ef258efd5e4e547582dffbabc86f78fcf30cee7feb81d9e9e3ffe3ff",
     "models-web/06-garden-lantern-tower.glb": "7c0b765e26c207384cf9dc211634f6c51bbad7257266689d4b80c0a7475eb2f7",
     "models-web/07-garden-emerald-canopy-tree.glb": "461738d6a6d1224f447a1c6ae674418ffab5472dcafd8885efa38a6f7655f4ca",
     "models-web/08-garden-pink-blossom-tree.glb": "fc075dc966f2b85135121419ffe82c0d74d97fe0b4348442e17528c269f02e08",
     "models-web/09-garden-teal-dome-tree.glb": "17655fa9f282b380c46a88158dbbd5561fd1f504f4b9dc6ce19e224212b5e134",
-    "models-web/10-garden-palm.glb": "e3f2629fb3e12217f0daa04c0bea90f0ecd37dca60fd69d3698e66019e6c16e1",
+    "models-web/10-garden-palm.glb": "0b465a2dec2b0b468e0e5e25c66d27b922a83bf30ff13e7e10a880de39dc42b9",
     "models-web/11-garden-flower-bush-cluster.glb": "021a01a09c391da2d1773a02aceb62d76bc3e31b1c6450d5f101ebc5a829cffe",
     "models-web/12-garden-straight-wall.glb": "f077d0fcb40dc6f588434b345188239d0c85917336fb8f9694f5d34c5d541065",
     "models-web/13-garden-corner-wall.glb": "3802638377f1eba3b89105654f926bbc2535e9132634f4ead147c59fe19fc362",
