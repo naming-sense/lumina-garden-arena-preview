@@ -1,5 +1,5 @@
 {
-  "version": 24,
+  "version": 25,
   "arena": {
     "width": 16,
     "depth": 9,
@@ -67,10 +67,10 @@
       "url": "../models-web/16-garden-rounded-planter.glb?v=24",
       "targetHeight": 0.6
     },
-    "straightWall": {
-      "label": "Straight garden wall",
+    "perimeterFrame": {
+      "label": "Single-piece garden perimeter frame",
       "category": "environment",
-      "url": "../models-web/12-garden-straight-wall.glb?v=24",
+      "url": "../models-web/17-garden-perimeter-frame.glb?v=25",
       "targetHeight": 0.92
     },
     "waterway": {
@@ -135,26 +135,7 @@
     { "id": "bush-bottom-left", "asset": "flowerBush", "position": [-3.08, 0.02, 2.45], "rotationY": -9, "scale": 0.7 },
     { "id": "bush-bottom-right", "asset": "flowerBush", "position": [3.08, 0.02, 2.45], "rotationY": 9, "scale": 0.7 },
 
-    { "id": "wall-northwest-outer", "asset": "straightWall", "position": [-6.6, 0, -4.2], "rotationY": 90 },
-    { "id": "wall-northwest-mid", "asset": "straightWall", "position": [-4.2, 0, -4.2], "rotationY": 90 },
-    { "id": "wall-northwest-inner", "asset": "straightWall", "position": [-1.8, 0, -4.2], "rotationY": 90 },
-    { "id": "wall-northeast-inner", "asset": "straightWall", "position": [1.8, 0, -4.2], "rotationY": 90 },
-    { "id": "wall-northeast-mid", "asset": "straightWall", "position": [4.2, 0, -4.2], "rotationY": 90 },
-    { "id": "wall-northeast-outer", "asset": "straightWall", "position": [6.6, 0, -4.2], "rotationY": 90 },
-    { "id": "wall-southwest-outer", "asset": "straightWall", "position": [-6.6, 0, 4.2], "rotationY": 90 },
-    { "id": "wall-southwest-mid", "asset": "straightWall", "position": [-4.2, 0, 4.2], "rotationY": 90 },
-    { "id": "wall-southwest-inner", "asset": "straightWall", "position": [-1.8, 0, 4.2], "rotationY": 90 },
-    { "id": "wall-southeast-inner", "asset": "straightWall", "position": [1.8, 0, 4.2], "rotationY": 90 },
-    { "id": "wall-southeast-mid", "asset": "straightWall", "position": [4.2, 0, 4.2], "rotationY": 90 },
-    { "id": "wall-southeast-outer", "asset": "straightWall", "position": [6.6, 0, 4.2], "rotationY": 90 },
-    { "id": "wall-west-north", "asset": "straightWall", "position": [-7.7, 0, -3.6], "rotationY": 0 },
-    { "id": "wall-west-midnorth", "asset": "straightWall", "position": [-7.7, 0, -1.2], "rotationY": 0 },
-    { "id": "wall-west-midsouth", "asset": "straightWall", "position": [-7.7, 0, 1.2], "rotationY": 0 },
-    { "id": "wall-west-south", "asset": "straightWall", "position": [-7.7, 0, 3.6], "rotationY": 0 },
-    { "id": "wall-east-north", "asset": "straightWall", "position": [7.7, 0, -3.6], "rotationY": 0 },
-    { "id": "wall-east-midnorth", "asset": "straightWall", "position": [7.7, 0, -1.2], "rotationY": 0 },
-    { "id": "wall-east-midsouth", "asset": "straightWall", "position": [7.7, 0, 1.2], "rotationY": 0 },
-    { "id": "wall-east-south", "asset": "straightWall", "position": [7.7, 0, 3.6], "rotationY": 0 },
+    { "id": "perimeter-frame", "asset": "perimeterFrame", "position": [0, 0, 0], "rotationY": 0, "scale": [3.143, 1, 1.547] },
     { "id": "planter-upper-left", "asset": "roundedPlanter", "position": [-1.45, 0, -2.5], "rotationY": 90, "scale": 0.82 },
     { "id": "planter-upper-right", "asset": "roundedPlanter", "position": [1.45, 0, -2.5], "rotationY": 90, "scale": 0.82 },
     { "id": "planter-upper-far-left", "asset": "roundedPlanter", "position": [-4.15, 0, -1.63], "rotationY": 0, "scale": 0.68 },

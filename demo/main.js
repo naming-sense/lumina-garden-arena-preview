@@ -157,7 +157,7 @@ function createSoftShadowTexture() {
 }
 
 const contactShadowTexture = isConstrainedDevice ? createSoftShadowTexture() : null;
-const contactShadowExcludedAssets = new Set(["waterway"]);
+const contactShadowExcludedAssets = new Set(["waterway", "perimeterFrame"]);
 
 async function mapWithConcurrency(items, concurrency, mapper) {
   const results = new Array(items.length);
@@ -198,7 +198,7 @@ const shortLabelByAsset = {
   tealTree: "Teal tree",
   gardenPalm: "Palm",
   flowerBush: "Flower bush",
-  straightWall: "Straight wall",
+  perimeterFrame: "Perimeter frame",
   roundedPlanter: "Planter",
   waterway: "Waterway",
   waterfallCliff: "Waterfall",
@@ -235,11 +235,11 @@ function renderTriangleBreakdown(rows, uniqueTriangles, renderedTriangles) {
 }
 
 const materialTuningByAsset = {
-  straightWall: { emissiveLift: 0.28, maxMetalness: 0, minRoughness: 0.82 },
+  perimeterFrame: { emissiveLift: 0.18, maxMetalness: 0, minRoughness: 0.78 },
   flowerBush: { emissiveLift: 0.13, maxMetalness: 0.04, minRoughness: 0.76 },
   roundedPlanter: { emissiveLift: 0.13, maxMetalness: 0.02, minRoughness: 0.74 },
 };
-const mobileShadowExcludedAssets = new Set(["waterway"]);
+const mobileShadowExcludedAssets = new Set(["waterway", "perimeterFrame"]);
 
 function prepareTemplate(gltfScene, targetHeight, assetKey) {
   const model = gltfScene;
@@ -362,7 +362,11 @@ function addInstance(instance, config, template) {
   placed.name = instance.id;
   placed.position.fromArray(instance.position);
   placed.rotation.y = THREE.MathUtils.degToRad(instance.rotationY ?? 0);
-  placed.scale.multiplyScalar(instance.scale ?? 1);
+  if (Array.isArray(instance.scale)) {
+    placed.scale.multiply(new THREE.Vector3().fromArray(instance.scale));
+  } else {
+    placed.scale.multiplyScalar(instance.scale ?? 1);
+  }
   placed.userData.asset = instance.asset;
   placed.userData.team = instance.team ?? null;
   placed.userData.category = config.category;

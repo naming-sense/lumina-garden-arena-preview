@@ -1,16 +1,16 @@
-# Garden Arena Reference-Matched Placement · Three.js v23
+# Garden Arena Reference-Matched Placement · Three.js v25
 
 원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 장면의 Tripo GLB 14종에 남아 있던 숨은 로컬 회전을 모두 제거하고 삼각형 진단 도구를 추가한 v16 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=23>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=25>
 
 ## 장면 구성
 
 - 핵심: 크리스탈 제단 1, 포탈 4, 상·하단 게이트 2, 랜턴탑 4
 - 식생: 큰 나무 7, 야자수 6, 꽃·덤불 클러스터 20
-- 담장/엄폐: 외곽 직선 담장 20, 코너 담장 0, 둥근 파스텔 화단 14
+- 담장/엄폐: 원화 기반 단일 외곽 액자 프레임 1, 둥근 파스텔 화단 14
 - 수경: 직선 수로 11, 측면 폭포·절벽 2
-- 고유 GLB 13개, 총 인스턴스 91개
+- 고유 GLB 13개, 총 인스턴스 72개
 
 내부 엄폐물로 임시 사용하던 직선 담장 `cover-*` 14개를 전부 제거하고, 승인된 새 원화에서 생성한 짧고 둥근 파스텔 화단 14개로 교체했다. 외곽 담장은 맵 경계 구조물이므로 유지했다. 위치·Y축 회전·개별 스케일은 `scene-placement.json`에 분리되어 있다.
 
@@ -30,6 +30,8 @@
 ## 배치 편집
 
 `position`은 `[x, y, z]`, `rotationY`는 degree, `scale`은 선택적 인스턴스 배율이다. 바닥 범위는 X `-8..8`, Z `-4.5..4.5`이며 이미지 상단이 음수 Z다. `targetHeight`를 바꾸면 GLB가 bottom-center 피벗을 기준으로 자동 정규화된다.
+
+v25의 `perimeterFrame`은 액자 프레임 원본 모델의 비율을 맵 외곽 X `20.5`, Z `13.2`에 맞추기 위해 `scale: [x, y, z]`를 사용한다. 이 배열형 스케일은 정규화된 템플릿 스케일에 곱해져 원본 높이를 유지한다.
 
 ## 실행
 
@@ -73,3 +75,5 @@ v16은 `Shaded`/`Wireframe` 전환과 13종 모델별 삼각형 표를 추가했
 v17은 Tripo 재생성 없이 Blender 4.0.2에서 감면한 반복 모듈을 실제 레벨의 `models-web`에 반영했다. 꽃덤불은 29,893→4,483, 직선 담장은 22,379→1,790, 수로는 26,238→2,230, 둥근 화단은 구멍이 생긴 R1을 제외하고 보수적 R2인 22,633→6,789 tris를 사용한다. 교체 전 웹 GLB 네 개는 `models-web/source-pre-retopo-r2/`에 그대로 백업했다.
 
 v18은 승인된 추가 후보를 같은 방식으로 반영했다. 포탈 아치는 22,630→5,657, 랜턴 타워는 21,258→5,314, 핑크 나무는 31,145→8,409, 야자수는 26,330→8,425 tris다. 에메랄드 나무는 자동 감면이 잎 사이를 찢는 문제를 보여 R1을 폐기했다. v19는 R5의 과한 덩어리감도 폐기하고, 원본 수관의 분할과 잎 텍스처가 남는 보수적 R2(50,158→24,075 tris)를 사용한다. R5 파일은 `models-web/source-pre-retopo-r6/`에 백업했다. Tripo 재생성은 사용하지 않았다.
+
+v25는 20개 `straightWall` 모듈을 제거하고, 새 원화로 만든 단일 폐쇄형 액자 프레임으로 교체했다. Tripo Smart Low Poly 결과는 12,041 tris이며, 웹 배포본은 Y-up으로 축을 정리하고 4K 텍스처 3장을 1024px WebP로 축소했다. 기존 직선 담장은 `models-web/source-pre-perimeter-frame-v25/`에 백업했다. 기존 게이트·포탈·수로·폭포의 게임플레이 좌표는 변경하지 않고 프레임이 그 전체를 바깥에서 감싼다.
