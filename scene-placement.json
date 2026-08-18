@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "arena": {
     "width": 16,
     "depth": 9,
@@ -70,7 +70,7 @@
     "straightWall": {
       "label": "Straight garden wall",
       "category": "environment",
-      "url": "../models-web/12-garden-straight-wall.glb",
+      "url": "../models-web/12-garden-straight-wall.glb?v=14",
       "targetHeight": 0.92
     },
     "waterway": {
