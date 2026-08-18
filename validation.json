@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-18T14:12:38+09:00",
+  "validatedAt": "2026-08-18T14:43:00+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
@@ -24,7 +24,7 @@
     }
   },
   "uniqueModels": 13,
-  "layoutVersion": 10,
+  "layoutVersion": 11,
   "layoutBasis": "original concept composition and bilateral gameplay symmetry",
   "perimeterWallValidation": {
     "cornerWallModelReferenced": false,
@@ -91,6 +91,39 @@
   },
   "uniqueTriangles": 355913,
   "renderedTriangles": 2359679,
+  "triangleDiagnostics": {
+    "metric": "sum of Tripo mesh triangles multiplied by scene instance count",
+    "excludes": ["floor", "portal and shrine glow geometry", "contact shadows", "shadow-map pass"],
+    "uniqueToRenderedMultiplier": 6.63,
+    "topFourRenderedTriangles": 1650920,
+    "topFourSharePercent": 70.0,
+    "breakdown": [
+      { "asset": "flowerBush", "uniqueTriangles": 29893, "instances": 20, "renderedTriangles": 597860, "sharePercent": 25.3 },
+      { "asset": "straightWall", "uniqueTriangles": 22379, "instances": 20, "renderedTriangles": 447580, "sharePercent": 19.0 },
+      { "asset": "roundedPlanter", "uniqueTriangles": 22633, "instances": 14, "renderedTriangles": 316862, "sharePercent": 13.4 },
+      { "asset": "waterway", "uniqueTriangles": 26238, "instances": 11, "renderedTriangles": 288618, "sharePercent": 12.2 },
+      { "asset": "gardenPalm", "uniqueTriangles": 26330, "instances": 6, "renderedTriangles": 157980, "sharePercent": 6.7 },
+      { "asset": "emeraldTree", "uniqueTriangles": 50159, "instances": 2, "renderedTriangles": 100318, "sharePercent": 4.3 },
+      { "asset": "pinkTree", "uniqueTriangles": 31145, "instances": 3, "renderedTriangles": 93435, "sharePercent": 4.0 },
+      { "asset": "portalArch", "uniqueTriangles": 22630, "instances": 4, "renderedTriangles": 90520, "sharePercent": 3.8 },
+      { "asset": "lanternTower", "uniqueTriangles": 21258, "instances": 4, "renderedTriangles": 85032, "sharePercent": 3.6 },
+      { "asset": "waterfallCliff", "uniqueTriangles": 29226, "instances": 2, "renderedTriangles": 58452, "sharePercent": 2.5 },
+      { "asset": "tealTree", "uniqueTriangles": 26090, "instances": 2, "renderedTriangles": 52180, "sharePercent": 2.2 },
+      { "asset": "mainGate", "uniqueTriangles": 22910, "instances": 2, "renderedTriangles": 45820, "sharePercent": 1.9 },
+      { "asset": "crystalShrine", "uniqueTriangles": 25022, "instances": 1, "renderedTriangles": 25022, "sharePercent": 1.1 }
+    ]
+  },
+  "wireframeValidation": {
+    "available": true,
+    "shadedToWireframeButton": true,
+    "wireframeToShadedRestore": true,
+    "deepLink": "?render=wireframe",
+    "triangleTableDeepLink": "?stats=1",
+    "triangleRows": 13,
+    "floorRemainsShaded": true,
+    "effectsAndShadowsSuppressedInWireframe": true,
+    "visualChecks": ["1600x1000 desktop", "orthographic top view", "390x844 mobile portrait"]
+  },
   "webOptimization": {
     "originalModelBytes": 119907384,
     "optimizedModelBytes": 11894848,
@@ -131,7 +164,7 @@
     "mobileVisualCheck": true
   },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=15",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=16",
     "hosting": "GitHub Pages",
     "pagesBuildStatus": "built",
     "pageHttpStatus": 200,
@@ -167,10 +200,10 @@
   "sha256": {
     "00-concept-reference.jpg": "fe9f4e16f1eab3e618bae6e1db92fef4897f6a4d8620b09542abebb20e92d320",
     "01-floor-only-map.png": "3cb61dd5871722d53247a2c5ceb09925b467eb7fffdd15e468a9f317dc64a682",
-    "scene-placement.json": "0bab8978a1f9bb21eb221d5da7a935d5ae7bcd45dff763bf7aacbaac7bc010e3",
-    "demo/main.js": "f769827090328ed95f439a9927e8002a34a2999f5616acc52e0401514b5aa1ab",
-    "demo/style.css": "465e3dc92d993567eebf799d1f7c3063fda2385c353e75b728984533a947889d",
-    "demo/index.html": "b61781b5d7d7c9590126a54d7dfa67680743e94dffbab88296dde1a6925539b9",
+    "scene-placement.json": "3bcd41a40d4b841d3791d4ef15a4ee15041d5991ea9d81beb5185580f568f6d5",
+    "demo/main.js": "7fbcd7020a81682255f81950fddc11c30e08483156f49c37f02371631a1bdcf8",
+    "demo/style.css": "0b3b5b6bbaae7d61b7fa222ed33761f80d7d8808a4c9920752c1c620fd43627a",
+    "demo/index.html": "438c466241c077eec5fe13a32aebb2f8c142af0911f83baf29afdb6084005947",
     "models-web/03-garden-crystal-shrine.glb": "1960ca6482a26579141839db1a72b081d89a05b9a58ec7915196ad2db7ac2568",
     "models-web/04-garden-portal-arch.glb": "39d162990c6435ad63734d4e92e2158cb5ae8213386436ed35885ca89d760024",
     "models-web/05-garden-main-gate.glb": "0f62d870864ca744a2db7298671596fba0890992194ffcd0eebcd61dac941b1c",

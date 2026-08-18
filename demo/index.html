@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Garden Arena · Reference-Matched Placement</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./style.css?v=6" />
+    <link rel="stylesheet" href="./style.css?v=16" />
     <script type="importmap">
       {
         "imports": {
@@ -29,6 +29,11 @@
           <button data-view="top">Top view</button>
         </div>
 
+        <div class="render-buttons" role="group" aria-label="렌더 표시 방식">
+          <button class="active" data-render-mode="shaded">Shaded</button>
+          <button data-render-mode="wireframe">Wireframe</button>
+        </div>
+
         <div class="toggles">
           <label><input id="core-objects" type="checkbox" checked /> Core objects</label>
           <label><input id="environment" type="checkbox" checked /> Environment</label>
@@ -42,6 +47,25 @@
         </div>
 
         <p id="stats" class="stats">Loading models…</p>
+
+        <details id="triangle-details" class="triangle-details">
+          <summary>Triangle breakdown</summary>
+          <p id="triangle-summary">Calculating…</p>
+          <div class="triangle-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Asset</th>
+                  <th>Each</th>
+                  <th>×</th>
+                  <th>Scene</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody id="triangle-body"></tbody>
+            </table>
+          </div>
+        </details>
       </section>
 
       <figure id="reference-card" class="reference-card">
@@ -57,6 +81,6 @@
 
       <pre id="validation" hidden></pre>
     </main>
-    <script type="module" src="./main.js?v=15"></script>
+    <script type="module" src="./main.js?v=16"></script>
   </body>
 </html>

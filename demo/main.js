@@ -16,8 +16,13 @@ const canvas = document.querySelector("#scene");
 const loading = document.querySelector("#loading");
 const progress = document.querySelector("#progress");
 const statsElement = document.querySelector("#stats");
+const triangleDetailsElement = document.querySelector("#triangle-details");
+const triangleSummaryElement = document.querySelector("#triangle-summary");
+const triangleBodyElement = document.querySelector("#triangle-body");
 const validationElement = document.querySelector("#validation");
 const referenceCard = document.querySelector("#reference-card");
+let wireframeEnabled = params.get("render") === "wireframe";
+triangleDetailsElement.open = params.get("stats") === "1";
 
 const renderer = new THREE.WebGLRenderer({
   canvas,
@@ -181,6 +186,52 @@ function countTriangles(root) {
       : (geometry.getAttribute("position")?.count ?? 0) / 3;
   });
   return Math.round(triangles);
+}
+
+const shortLabelByAsset = {
+  crystalShrine: "Crystal shrine",
+  portalArch: "Portal arch",
+  mainGate: "Main gate",
+  lanternTower: "Lantern tower",
+  emeraldTree: "Emerald tree",
+  pinkTree: "Pink tree",
+  tealTree: "Teal tree",
+  gardenPalm: "Palm",
+  flowerBush: "Flower bush",
+  straightWall: "Straight wall",
+  roundedPlanter: "Planter",
+  waterway: "Waterway",
+  waterfallCliff: "Waterfall",
+};
+
+function renderTriangleBreakdown(rows, uniqueTriangles, renderedTriangles) {
+  const topFourTriangles = rows
+    .slice(0, 4)
+    .reduce((sum, row) => sum + row.renderedTriangles, 0);
+  const topFourShare = (topFourTriangles / Math.max(renderedTriangles, 1)) * 100;
+  triangleSummaryElement.textContent =
+    `Top 4 repeated modules: ${topFourTriangles.toLocaleString()} tris ` +
+    `(${topFourShare.toFixed(1)}%). Unique source geometry: ` +
+    `${uniqueTriangles.toLocaleString()} tris.`;
+
+  triangleBodyElement.replaceChildren();
+  for (const row of rows) {
+    const tableRow = document.createElement("tr");
+    const values = [
+      shortLabelByAsset[row.asset] ?? row.asset,
+      row.uniqueTriangles.toLocaleString(),
+      row.instances.toLocaleString(),
+      row.renderedTriangles.toLocaleString(),
+      `${row.sharePercent.toFixed(1)}%`,
+    ];
+    for (const value of values) {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      cell.title = value;
+      tableRow.appendChild(cell);
+    }
+    triangleBodyElement.appendChild(tableRow);
+  }
 }
 
 const materialTuningByAsset = {
@@ -399,9 +450,72 @@ function setEffectsVisible(visible) {
   });
 }
 
+const wireframeMaterialCache = new WeakMap();
+
+function hasTaggedAncestor(object, tag) {
+  let current = object;
+  while (current && current !== objectRoot) {
+    if (current.userData?.[tag]) return true;
+    current = current.parent;
+  }
+  return false;
+}
+
+function getWireframeMaterial(source) {
+  if (wireframeMaterialCache.has(source)) return wireframeMaterialCache.get(source);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x087f91,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.58,
+    side: THREE.FrontSide,
+    toneMapped: false,
+  });
+  material.name = `${source.name || "material"}-diagnostic-wireframe`;
+  wireframeMaterialCache.set(source, material);
+  return material;
+}
+
+function setRenderMode(mode) {
+  wireframeEnabled = mode === "wireframe";
+  objectRoot.traverse((child) => {
+    if (!child.isMesh) return;
+    if (hasTaggedAncestor(child, "effect")) return;
+    if (hasTaggedAncestor(child, "contactShadow")) {
+      child.visible = !wireframeEnabled;
+      return;
+    }
+
+    if (wireframeEnabled) {
+      if (!child.userData.shadedMaterial) child.userData.shadedMaterial = child.material;
+      const shadedMaterials = Array.isArray(child.userData.shadedMaterial)
+        ? child.userData.shadedMaterial
+        : [child.userData.shadedMaterial];
+      const wireframeMaterials = shadedMaterials.map(getWireframeMaterial);
+      child.material = Array.isArray(child.userData.shadedMaterial)
+        ? wireframeMaterials
+        : wireframeMaterials[0];
+    } else if (child.userData.shadedMaterial) {
+      child.material = child.userData.shadedMaterial;
+    }
+  });
+
+  renderer.shadowMap.enabled = !wireframeEnabled;
+  if (!wireframeEnabled && isConstrainedDevice) renderer.shadowMap.needsUpdate = true;
+  setEffectsVisible(
+    !wireframeEnabled && document.querySelector("#effects").checked,
+  );
+  document.body.classList.toggle("wireframe-mode", wireframeEnabled);
+  document.body.dataset.renderMode = wireframeEnabled ? "wireframe" : "shaded";
+  window.__ARENA_RENDER_MODE__ = document.body.dataset.renderMode;
+  document.querySelectorAll("button[data-render-mode]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.renderMode === mode);
+  });
+}
+
 async function buildScene() {
   const [placement, floorMap] = await Promise.all([
-    fetch("../scene-placement.json?v=15").then((response) => {
+    fetch("../scene-placement.json?v=16").then((response) => {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
@@ -492,6 +606,22 @@ async function buildScene() {
     (sum, [asset, count]) => sum + templates[asset].triangles * count,
     0,
   );
+  const triangleBreakdown = Object.entries(perAssetInstances)
+    .map(([asset, instances]) => {
+      const assetTriangles = templates[asset].triangles;
+      const assetRenderedTriangles = assetTriangles * instances;
+      return {
+        asset,
+        uniqueTriangles: assetTriangles,
+        instances,
+        renderedTriangles: assetRenderedTriangles,
+        sharePercent: (assetRenderedTriangles / Math.max(renderedTriangles, 1)) * 100,
+      };
+    })
+    .sort((left, right) => right.renderedTriangles - left.renderedTriangles);
+  const topFourRenderedTriangles = triangleBreakdown
+    .slice(0, 4)
+    .reduce((sum, row) => sum + row.renderedTriangles, 0);
   const report = {
     ready: true,
     floor: "2048x1152 v10 concept-matched grass",
@@ -521,8 +651,17 @@ async function buildScene() {
       (instance) => placement.models[instance.asset].category === "environment",
     ).length,
     perAssetInstances,
+    perAssetTriangles: Object.fromEntries(
+      Object.entries(templates).map(([asset, entry]) => [asset, entry.triangles]),
+    ),
+    triangleBreakdown,
     uniqueTriangles,
     renderedTriangles,
+    topFourRenderedTriangles,
+    topFourSharePercent: Number(
+      ((topFourRenderedTriangles / Math.max(renderedTriangles, 1)) * 100).toFixed(1),
+    ),
+    wireframeAvailable: true,
     modelSizes: Object.fromEntries(
       Object.entries(templates).map(([key, entry]) => [
         key,
@@ -531,7 +670,11 @@ async function buildScene() {
     ),
   };
 
-  statsElement.textContent = `${report.uniqueModels} GLBs · ${report.coreInstances} core + ${report.environmentInstances} environment · ${report.renderedTriangles.toLocaleString()} rendered tris`;
+  statsElement.textContent =
+    `${report.uniqueModels} GLBs · ${report.instances} instances · ` +
+    `${report.uniqueTriangles.toLocaleString()} unique tris · ` +
+    `${report.renderedTriangles.toLocaleString()} rendered tris`;
+  renderTriangleBreakdown(triangleBreakdown, uniqueTriangles, renderedTriangles);
   validationElement.textContent = JSON.stringify(report);
   document.body.dataset.ready = "true";
   window.__ARENA_READY__ = true;
@@ -539,10 +682,15 @@ async function buildScene() {
   progress.textContent = "100%";
   loading.classList.add("hidden");
   if (isConstrainedDevice) renderer.shadowMap.needsUpdate = true;
+  setRenderMode(wireframeEnabled ? "wireframe" : "shaded");
 }
 
 document.querySelectorAll("[data-view]").forEach((button) => {
   button.addEventListener("click", () => setCameraView(button.dataset.view));
+});
+
+document.querySelectorAll("button[data-render-mode]").forEach((button) => {
+  button.addEventListener("click", () => setRenderMode(button.dataset.renderMode));
 });
 
 document.querySelector("#core-objects").addEventListener("change", (event) => {
@@ -556,7 +704,7 @@ document.querySelector("#environment").addEventListener("change", (event) => {
 });
 
 document.querySelector("#effects").addEventListener("change", (event) => {
-  setEffectsVisible(event.currentTarget.checked);
+  setEffectsVisible(!wireframeEnabled && event.currentTarget.checked);
 });
 
 document.querySelector("#reference").addEventListener("change", (event) => {

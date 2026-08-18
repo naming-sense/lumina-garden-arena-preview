@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v15
+# Garden Arena Reference-Matched Placement · Three.js v16
 
-원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 장면의 Tripo GLB 14종에 남아 있던 숨은 로컬 회전을 모두 제거한 v15 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
+원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 장면의 Tripo GLB 14종에 남아 있던 숨은 로컬 회전을 모두 제거하고 삼각형 진단 도구를 추가한 v16 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=15>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=16>
 
 ## 장면 구성
 
@@ -38,11 +38,13 @@ cd garden-arena-environment-placement-threejs-v2
 python3 -m http.server 8795
 ```
 
-브라우저에서 `http://localhost:8795/demo/`를 연다. 화면 우측 아래에서 기준 원화를 함께 비교할 수 있고 패널의 `Original` 토글로 숨길 수 있다. `?view=top`은 탑뷰, `?ui=0`은 캡처용 UI 숨김 모드다.
+브라우저에서 `http://localhost:8795/demo/`를 연다. 화면 우측 아래에서 기준 원화를 함께 비교할 수 있고 패널의 `Original` 토글로 숨길 수 있다. `Shaded`/`Wireframe` 버튼으로 모든 Tripo 메시를 즉시 전환하며, `Triangle breakdown`을 열면 모델별 고유 tris·배치 개수·누적 tris·점유율을 확인할 수 있다. `?view=top`은 탑뷰, `?render=wireframe`은 와이어프레임 시작, `?stats=1`은 삼각형 표 자동 열기, `?ui=0`은 캡처용 UI 숨김 모드다.
 
 ## 성능 주의
 
 실제 Chrome WebGL에서 13개 GLB와 91개 인스턴스, 2,359,679 rendered triangles를 확인했다. 현재 장면은 고품질 배치 프리뷰다. 모바일 게임 투입 전에는 환경 에셋 리토폴로지/LOD, 반복 담장 인스턴싱, 단순 충돌체, 수로·폭포 전용 애니메이션 셰이더를 적용한다.
+
+고유 소스 메시 자체는 합계 355,913 tris지만 같은 모델을 91번 배치하면서 2,359,679 tris로 누적된다. 가장 큰 원인은 꽃덤불 597,860(25.3%), 직선 담장 447,580(19.0%), 둥근 화단 316,862(13.4%), 수로 288,618(12.2%)이며, 이 반복 모듈 네 종류만 1,650,920 tris로 전체의 70.0%다. 이 수치는 바닥·글로우 효과·접지 그림자·그림자 패스는 제외한 Tripo 메시 인스턴스 합계라 실제 GPU 작업량은 더 클 수 있다.
 
 웹 프리뷰는 장면에서 참조하는 원본 4K 텍스처 GLB 119.9MB 대신 1024px WebP GLB 11.9MB를 로드한다. 예상 텍스처 GPU 메모리는 약 3.49GB에서 218MB로 줄었고, 모바일에서는 모델을 2개씩 로드하며 안티앨리어싱과 고해상도 픽셀 비율을 비활성화한다. 그림자는 1024px 섀도맵을 최초 한 번만 계산하고 이후 고정하며, 로딩 퍼센트는 내부 요청 수가 늘어나도 뒤로 되돌아가지 않는다.
 
@@ -65,3 +67,5 @@ v13은 사선 형태의 `cornerWall` 모델 정의와 인스턴스 4개를 장�
 v14는 `straightWall` GLB 루트에 남아 있던 `-22.1857°` Yaw를 identity quaternion `[0, 0, 0, 1]`로 초기화했다. 배치 좌표와 0°/90° 회전은 유지하면서 실제 메시 장축이 월드 X/Z축과 정확히 평행해진다. 원본 4K GLB와 웹용 1024px GLB를 함께 수정했고, 웹 URL에는 v14 캐시 버스터를 적용했다.
 
 v15는 크리스탈 제단·포탈 아치·메인 게이트·랜턴탑·나무 3종·야자수·꽃덤불·직선/코너 담장·수로·폭포 절벽·둥근 화단까지 Tripo GLB 14종 전체의 노드 회전을 identity quaternion `[0, 0, 0, 1]`로 통일했다. 따라서 폭포·수로·아치·게이트의 배치 회전은 이제 `scene-placement.json`에 적힌 월드 Y 회전만 반영한다. 식생과 화단에 남은 비정방향 회전은 숨은 GLB 회전이 아니라 장면에서 의도적으로 명시한 인스턴스 회전이다.
+
+v16은 `Shaded`/`Wireframe` 전환과 13종 모델별 삼각형 표를 추가했다. 와이어프레임 모드는 바닥은 유지하면서 Tripo 메시만 청록색 진단선으로 바꾸고 팀 글로우·접지 그림자·섀도맵을 잠시 숨겨 토폴로지를 보기 쉽게 만든다. 다시 `Shaded`를 누르면 원래 재질·효과·그림자를 복원한다.
