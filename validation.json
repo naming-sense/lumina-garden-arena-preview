@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-18T13:13:14+09:00",
+  "validatedAt": "2026-08-18T13:24:09+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
@@ -24,11 +24,11 @@
     }
   },
   "uniqueModels": 14,
-  "layoutVersion": 6,
+  "layoutVersion": 7,
   "layoutBasis": "original concept composition and bilateral gameplay symmetry",
-  "instances": 97,
+  "instances": 95,
   "coreInstances": 11,
-  "environmentInstances": 86,
+  "environmentInstances": 84,
   "perAssetInstances": {
     "crystalShrine": 1,
     "portalArch": 4,
@@ -39,14 +39,14 @@
     "tealTree": 2,
     "gardenPalm": 6,
     "flowerBush": 20,
-    "straightWall": 22,
+    "straightWall": 20,
     "roundedPlanter": 14,
     "cornerWall": 4,
     "waterway": 11,
     "waterfallCliff": 2
   },
   "uniqueTriangles": 379898,
-  "renderedTriangles": 2500377,
+  "renderedTriangles": 2455619,
   "webOptimization": {
     "originalModelBytes": 127772844,
     "optimizedModelBytes": 12700052,
@@ -61,7 +61,7 @@
     "mobileShadowMode": "static PCFSoftShadowMap plus instanced contact shadows",
     "mobileShadowMapSize": 1024,
     "mobileShadowMapAutoUpdate": false,
-    "mobileContactShadowInstances": 86,
+    "mobileContactShadowInstances": 84,
     "monotonicLoadingProgress": true
   },
   "lightingPolish": {
@@ -87,7 +87,7 @@
     "mobileVisualCheck": true
   },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=11",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=12",
     "hosting": "GitHub Pages",
     "pagesBuildStatus": "built",
     "pageHttpStatus": 200,
@@ -95,7 +95,7 @@
     "fullWebglLoad": true,
     "verifiedDesktop": true,
     "verifiedMobilePortrait": true,
-    "verifiedInstances": 97
+    "verifiedInstances": 95
   },
   "blenderReimport": {
     "version": "4.0.2",
@@ -116,18 +116,18 @@
     "gardenPalm": [3.042, 2.5, 3.006],
     "flowerBush": [1.295, 0.5, 1.737],
     "roundedPlanter": [1.226, 0.6, 1.445],
-    "straightWall": [1.113, 0.72, 1.882],
-    "cornerWall": [1.864, 0.72, 1.864],
+    "straightWall": [1.422, 0.92, 2.404],
+    "cornerWall": [2.382, 0.92, 2.381],
     "waterway": [1.449, 0.28, 1.549],
     "waterfallCliff": [2.698, 1.62, 3.414]
   },
   "sha256": {
     "00-concept-reference.jpg": "fe9f4e16f1eab3e618bae6e1db92fef4897f6a4d8620b09542abebb20e92d320",
     "01-floor-only-map.png": "3cb61dd5871722d53247a2c5ceb09925b467eb7fffdd15e468a9f317dc64a682",
-    "scene-placement.json": "4b9f6511d6807c1088e93c463efe7a401e7d11af0884aefc64703f93af86f483",
-    "demo/main.js": "ddd79c999a760e71ac11a095768e98f953a410cb581a5b87d27f78d4889eaab2",
+    "scene-placement.json": "e0aa8ab4cbf2a2369289ca7502f80ef66a6b140aec05288074c1c58a7cdf5fe8",
+    "demo/main.js": "5f97b95e89d1b667833d3c4012a4470785b6a90422f8644c3f8b3e11a8ebcdfe",
     "demo/style.css": "465e3dc92d993567eebf799d1f7c3063fda2385c353e75b728984533a947889d",
-    "demo/index.html": "3a75897bb1e00346d95a49dd8685c82cb74fd29d242829f0233bd1009df9de62",
+    "demo/index.html": "38d35d3468783d2218f471345cba66be3389a650055f27fb12c3e8a2e77b2c72",
     "models/03-garden-crystal-shrine.glb": "0800e3402dda1640c0dd35a20e1b153d9912e6d85a2665d2d46548083f63a739",
     "models/04-garden-portal-arch.glb": "20aea08923cc6a321c51a1a0e8e9672d2574be9eab4f24fd1e0151ea0772518b",
     "models/05-garden-main-gate.glb": "dd087029c1254212f00242260d2f3373b02efb5de437f16662ea3048295454b6",
