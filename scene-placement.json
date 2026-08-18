@@ -1,5 +1,5 @@
 {
-  "version": 27,
+  "version": 28,
   "arena": {
     "width": 16,
     "depth": 9,
@@ -22,7 +22,7 @@
     "mainGate": {
       "label": "Main garden gate",
       "category": "core",
-      "url": "../models-web/05-garden-main-gate.glb?v=24",
+      "url": "../models-web/05-garden-main-gate.glb?v=28",
       "targetHeight": 1.48
     },
     "lanternTower": {
@@ -82,7 +82,7 @@
     "waterfallCliff": {
       "label": "Waterfall cliff",
       "category": "environment",
-      "url": "../models-web/15-garden-waterfall-cliff.glb?v=24",
+      "url": "../models-web/15-garden-waterfall-cliff.glb?v=28",
       "targetHeight": 1.62
     }
   },

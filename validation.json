@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-18T22:38:00+09:00",
+  "validatedAt": "2026-08-18T22:55:00+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
@@ -257,10 +257,19 @@
     "levelColorMatch": "warm cream emissive tint removed; textured materials now use neutral white lift",
     "pinkBlossomCorrection": "shader mask adjusts blossom reds to concept-matched deep magenta without recoloring trunk or leaves"
   },
+  "meshAxisBakeV28": {
+    "problem": "the main-gate and waterfall mesh vertices were generated off-axis even though their GLB root quaternions were identity",
+    "method": "baked Y-axis vertex, normal and tangent corrections into the web GLBs without adding node transforms",
+    "mainGateCorrectionDegrees": -23.36,
+    "waterfallCliffCorrectionDegrees": 22.94,
+    "rootQuaternionsRemainIdentity": true,
+    "topViewCheck": "gates and waterfalls are parallel to their matching perimeter-frame edges",
+    "sourceBackup": "models-web/source-pre-axis-bake-v28/"
+  },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=27",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=28",
     "hosting": "GitHub Pages",
-    "pagesBuildStatus": "pending v27 deployment",
+    "pagesBuildStatus": "pending v28 deployment",
     "pageHttpStatus": null,
     "placementHttpStatus": null,
     "fullWebglLoad": false,
