@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v25
+# Garden Arena Reference-Matched Placement · Three.js v26
 
 원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 장면의 Tripo GLB 14종에 남아 있던 숨은 로컬 회전을 모두 제거하고 삼각형 진단 도구를 추가한 v16 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=25>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=26>
 
 ## 장면 구성
 
@@ -31,7 +31,7 @@
 
 `position`은 `[x, y, z]`, `rotationY`는 degree, `scale`은 선택적 인스턴스 배율이다. 바닥 범위는 X `-8..8`, Z `-4.5..4.5`이며 이미지 상단이 음수 Z다. `targetHeight`를 바꾸면 GLB가 bottom-center 피벗을 기준으로 자동 정규화된다.
 
-v25의 `perimeterFrame`은 액자 프레임 원본 모델의 비율을 맵 외곽 X `20.5`, Z `13.2`에 맞추기 위해 `scale: [x, y, z]`를 사용한다. 이 배열형 스케일은 정규화된 템플릿 스케일에 곱해져 원본 높이를 유지한다.
+v26의 `perimeterFrame`은 액자 프레임 원본 모델의 비율을 실제 라이브 맵 외곽 X `18.59`, Z `10.66`에 맞추기 위해 `scale: [x, y, z]`를 사용한다. 이 배열형 스케일은 정규화된 템플릿 스케일에 곱해져 원본 높이를 유지한다.
 
 ## 실행
 

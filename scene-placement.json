@@ -1,5 +1,5 @@
 {
-  "version": 25,
+  "version": 26,
   "arena": {
     "width": 16,
     "depth": 9,
@@ -70,7 +70,7 @@
     "perimeterFrame": {
       "label": "Single-piece garden perimeter frame",
       "category": "environment",
-      "url": "../models-web/17-garden-perimeter-frame.glb?v=25",
+      "url": "../models-web/17-garden-perimeter-frame.glb?v=26",
       "targetHeight": 0.92
     },
     "waterway": {
@@ -135,7 +135,7 @@
     { "id": "bush-bottom-left", "asset": "flowerBush", "position": [-3.08, 0.02, 2.45], "rotationY": -9, "scale": 0.7 },
     { "id": "bush-bottom-right", "asset": "flowerBush", "position": [3.08, 0.02, 2.45], "rotationY": 9, "scale": 0.7 },
 
-    { "id": "perimeter-frame", "asset": "perimeterFrame", "position": [0, 0, 0], "rotationY": 0, "scale": [3.143, 1, 1.547] },
+    { "id": "perimeter-frame", "asset": "perimeterFrame", "position": [0, 0, 0], "rotationY": 0, "scale": [2.85, 1, 1.25] },
     { "id": "planter-upper-left", "asset": "roundedPlanter", "position": [-1.45, 0, -2.5], "rotationY": 90, "scale": 0.82 },
     { "id": "planter-upper-right", "asset": "roundedPlanter", "position": [1.45, 0, -2.5], "rotationY": 90, "scale": 0.82 },
     { "id": "planter-upper-far-left", "asset": "roundedPlanter", "position": [-4.15, 0, -1.63], "rotationY": 0, "scale": 0.68 },
