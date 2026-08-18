@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v7
+# Garden Arena Reference-Matched Placement · Three.js v8
 
 `garden-arena-flooronly-threejs-v8` 바닥 위의 Tripo 메시를 원화 구도에 맞춰 다시 배치한 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=7>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=8>
 
 ## 장면 구성
 
@@ -44,8 +44,10 @@ python3 -m http.server 8795
 
 실제 Chrome WebGL에서 13개 GLB와 95개 인스턴스, 2,452,063 rendered triangles를 확인했다. 현재 장면은 고품질 배치 프리뷰다. 모바일 게임 투입 전에는 환경 에셋 리토폴로지/LOD, 반복 담장 인스턴싱, 단순 충돌체, 수로·폭포 전용 애니메이션 셰이더를 적용한다.
 
-웹 프리뷰는 원본 4K 텍스처 GLB 118.5MB 대신 1024px WebP GLB 11.8MB를 로드한다. 예상 텍스처 GPU 메모리는 약 3.49GB에서 218MB로 줄었고, 모바일에서는 모델을 2개씩 로드하며 그림자·안티앨리어싱·고해상도 픽셀 비율을 비활성화한다. 로딩 퍼센트는 내부 요청 수가 늘어나도 뒤로 되돌아가지 않는다.
+웹 프리뷰는 원본 4K 텍스처 GLB 118.5MB 대신 1024px WebP GLB 11.8MB를 로드한다. 예상 텍스처 GPU 메모리는 약 3.49GB에서 218MB로 줄었고, 모바일에서는 모델을 2개씩 로드하며 안티앨리어싱과 고해상도 픽셀 비율을 비활성화한다. 그림자는 1024px 섀도맵을 최초 한 번만 계산하고 이후 고정하며, 로딩 퍼센트는 내부 요청 수가 늘어나도 뒤로 되돌아가지 않는다.
 
 ## 밝기 폴리싱
 
 v7은 Neutral tone mapping, 따뜻한 키라이트와 청록 필라이트, 반구광·전면 보조광을 유지하면서 톤을 다시 균형화했다. 바닥의 인위적 발광을 제거하고 채도를 72%로 제한했으며, 중앙 화단·담장은 금속도를 제거하고 0.42 강도의 간접광을 별도로 적용해 바닥보다 어둡게 꺼지지 않도록 했다. 꽃덤불도 동일한 방향으로 더 약하게 보정했다.
+
+v8은 데스크톱의 PCF 소프트 섀도맵을 유지하면서 모바일 경량 모드에도 1024px PCF 섀도맵과 소프트 접지 그림자를 추가했다. 모바일 섀도맵은 모든 오브젝트가 로드된 뒤 한 번만 계산해 고정하며, 수로를 제외한 84개 오브젝트의 접지 그림자는 카테고리별 `InstancedMesh` 두 번의 드로우콜로 처리한다. 카메라를 움직일 때는 섀도맵을 다시 계산하지 않는다.

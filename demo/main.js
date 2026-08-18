@@ -30,8 +30,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NeutralToneMapping;
 renderer.toneMappingExposure = 1.08;
-renderer.shadowMap.enabled = !isConstrainedDevice;
+renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.autoUpdate = !isConstrainedDevice;
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(
@@ -87,8 +88,8 @@ scene.add(hemisphere);
 
 const keyLight = new THREE.DirectionalLight(0xffefd2, 2.55);
 keyLight.position.set(-6, 13, 8);
-keyLight.castShadow = !isConstrainedDevice;
-keyLight.shadow.mapSize.set(isConstrainedDevice ? 512 : 2048, isConstrainedDevice ? 512 : 2048);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(isConstrainedDevice ? 1024 : 2048, isConstrainedDevice ? 1024 : 2048);
 keyLight.shadow.camera.left = -12;
 keyLight.shadow.camera.right = 12;
 keyLight.shadow.camera.top = 9;
@@ -130,6 +131,29 @@ loadingManager.onProgress = (_url, loaded, total) => {
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const gltfLoader = new GLTFLoader(loadingManager);
 
+function createSoftShadowTexture() {
+  const shadowCanvas = document.createElement("canvas");
+  shadowCanvas.width = 128;
+  shadowCanvas.height = 128;
+  const context = shadowCanvas.getContext("2d");
+  const gradient = context.createRadialGradient(54, 50, 4, 64, 64, 61);
+  gradient.addColorStop(0, "rgba(255, 255, 255, 0.94)");
+  gradient.addColorStop(0.42, "rgba(255, 255, 255, 0.62)");
+  gradient.addColorStop(0.78, "rgba(255, 255, 255, 0.18)");
+  gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, shadowCanvas.width, shadowCanvas.height);
+
+  const texture = new THREE.CanvasTexture(shadowCanvas);
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.generateMipmaps = false;
+  return texture;
+}
+
+const contactShadowTexture = isConstrainedDevice ? createSoftShadowTexture() : null;
+const contactShadowExcludedAssets = new Set(["waterway"]);
+
 async function mapWithConcurrency(items, concurrency, mapper) {
   const results = new Array(items.length);
   let nextIndex = 0;
@@ -164,6 +188,7 @@ const materialTuningByAsset = {
   cornerWall: { emissiveLift: 0.42, maxMetalness: 0, minRoughness: 0.82 },
   flowerBush: { emissiveLift: 0.2, maxMetalness: 0.04, minRoughness: 0.76 },
 };
+const mobileShadowExcludedAssets = new Set(["waterway"]);
 
 function prepareTemplate(gltfScene, targetHeight, assetKey) {
   const model = gltfScene;
@@ -189,7 +214,7 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
 
   model.traverse((child) => {
     if (!child.isMesh) return;
-    child.castShadow = !isConstrainedDevice;
+    child.castShadow = !isConstrainedDevice || !mobileShadowExcludedAssets.has(assetKey);
     child.receiveShadow = !isConstrainedDevice;
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     for (const material of materials) {
@@ -303,6 +328,71 @@ function addInstance(instance, config, template) {
   targetRoot.add(placed);
 }
 
+function addMobileContactShadows(instances, placement, templates, category, targetRoot) {
+  if (!isConstrainedDevice || !contactShadowTexture) return 0;
+
+  const shadowInstances = instances.filter(
+    (instance) =>
+      placement.models[instance.asset].category === category &&
+      !contactShadowExcludedAssets.has(instance.asset),
+  );
+  if (shadowInstances.length === 0) return 0;
+
+  const shadowGeometry = new THREE.PlaneGeometry(1, 1);
+  const shadowMaterial = new THREE.MeshBasicMaterial({
+    map: contactShadowTexture,
+    color: 0x294b45,
+    transparent: true,
+    opacity: 0.24,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const shadows = new THREE.InstancedMesh(
+    shadowGeometry,
+    shadowMaterial,
+    shadowInstances.length,
+  );
+  shadows.name = `${category}-mobile-contact-shadows`;
+  shadows.renderOrder = -1;
+  shadows.frustumCulled = false;
+  shadows.userData.contactShadow = true;
+
+  const groundRotation = new THREE.Quaternion().setFromEuler(
+    new THREE.Euler(-Math.PI / 2, 0, 0),
+  );
+  const yawRotation = new THREE.Quaternion();
+  const combinedRotation = new THREE.Quaternion();
+  const matrix = new THREE.Matrix4();
+  const position = new THREE.Vector3();
+  const scale = new THREE.Vector3();
+
+  shadowInstances.forEach((instance, index) => {
+    const template = templates[instance.asset];
+    const instanceScale = instance.scale ?? 1;
+    const height = template.size[1] * instanceScale;
+    const width = Math.max(template.size[0] * 0.76, 0.3) * instanceScale;
+    const depth = Math.max(template.size[2] * 0.76, 0.3) * instanceScale;
+
+    position.set(
+      instance.position[0] + height * 0.045,
+      0.022,
+      instance.position[2] - height * 0.06,
+    );
+    yawRotation.setFromAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      THREE.MathUtils.degToRad(instance.rotationY ?? 0),
+    );
+    combinedRotation.copy(yawRotation).multiply(groundRotation);
+    scale.set(width, depth, 1);
+    matrix.compose(position, combinedRotation, scale);
+    shadows.setMatrixAt(index, matrix);
+  });
+
+  shadows.instanceMatrix.needsUpdate = true;
+  targetRoot.add(shadows);
+  return shadowInstances.length;
+}
+
 function setEffectsVisible(visible) {
   objectRoot.traverse((child) => {
     if (child.userData.effect) child.visible = visible;
@@ -358,7 +448,7 @@ async function buildScene() {
     floorMaterial,
   );
   floor.rotation.x = -Math.PI / 2;
-  floor.receiveShadow = !isConstrainedDevice;
+  floor.receiveShadow = true;
   scene.add(floor);
 
   const modelEntries = Object.entries(placement.models);
@@ -376,6 +466,22 @@ async function buildScene() {
   for (const instance of placement.instances) {
     addInstance(instance, placement.models[instance.asset], templates[instance.asset]);
   }
+
+  const mobileContactShadowInstances =
+    addMobileContactShadows(
+      placement.instances,
+      placement,
+      templates,
+      "core",
+      coreRoot,
+    ) +
+    addMobileContactShadows(
+      placement.instances,
+      placement,
+      templates,
+      "environment",
+      environmentRoot,
+    );
 
   const perAssetInstances = placement.instances.reduce((counts, instance) => {
     counts[instance.asset] = (counts[instance.asset] ?? 0) + 1;
@@ -398,6 +504,10 @@ async function buildScene() {
     texturedMaterialAmbientLift: 0.075,
     planterAmbientLift: 0.42,
     naturalMaterialMaxMetalness: 0.12,
+    shadowMode: isConstrainedDevice ? "static-PCFSoftShadowMap+contact" : "PCFSoftShadowMap",
+    shadowMapSize: isConstrainedDevice ? 1024 : 2048,
+    shadowMapAutoUpdate: renderer.shadowMap.autoUpdate,
+    mobileContactShadowInstances,
     constrainedDevice: isConstrainedDevice,
     portraitMobile: isPortraitMobile,
     loadingConcurrency,
@@ -427,6 +537,7 @@ async function buildScene() {
   window.__ARENA_REPORT__ = report;
   progress.textContent = "100%";
   loading.classList.add("hidden");
+  if (isConstrainedDevice) renderer.shadowMap.needsUpdate = true;
 }
 
 document.querySelectorAll("[data-view]").forEach((button) => {
@@ -435,10 +546,12 @@ document.querySelectorAll("[data-view]").forEach((button) => {
 
 document.querySelector("#core-objects").addEventListener("change", (event) => {
   coreRoot.visible = event.currentTarget.checked;
+  if (isConstrainedDevice) renderer.shadowMap.needsUpdate = true;
 });
 
 document.querySelector("#environment").addEventListener("change", (event) => {
   environmentRoot.visible = event.currentTarget.checked;
+  if (isConstrainedDevice) renderer.shadowMap.needsUpdate = true;
 });
 
 document.querySelector("#effects").addEventListener("change", (event) => {
