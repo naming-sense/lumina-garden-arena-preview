@@ -1,8 +1,8 @@
-# Garden Arena Reference-Matched Placement · Three.js v14
+# Garden Arena Reference-Matched Placement · Three.js v15
 
-원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 외곽 직선 담장의 잘못된 로컬 Yaw를 제거한 v14 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
+원화의 잔디 재질과 전체 명도를 맞춘 v10 바닥 위에서, 장면의 Tripo GLB 14종에 남아 있던 숨은 로컬 회전을 모두 제거한 v15 브라우저 프리뷰다. 좌우 대칭, 중앙 전투 공간, 상·하단 게이트, 측면 포탈·폭포, 외곽 수로·담장·식생의 대응 위치를 기준으로 삼았다.
 
-고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=14>
+고정 공개 프리뷰: <https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=15>
 
 ## 장면 구성
 
@@ -63,3 +63,5 @@ v12는 v11이 화면에서 거의 달라 보이지 않았던 원인을 수정했
 v13은 사선 형태의 `cornerWall` 모델 정의와 인스턴스 4개를 장면에서 완전히 제거했다. 외곽은 `straightWall` 20개만 사용하며 북·남 행은 Z `-4.2`/`4.2`에서 90°, 동·서 열은 X `-7.7`/`7.7`에서 0°로 고정했다. 모서리는 직선 담장 끝을 직각으로 겹쳐 닫으므로 사선 담장 메시가 없다.
 
 v14는 `straightWall` GLB 루트에 남아 있던 `-22.1857°` Yaw를 identity quaternion `[0, 0, 0, 1]`로 초기화했다. 배치 좌표와 0°/90° 회전은 유지하면서 실제 메시 장축이 월드 X/Z축과 정확히 평행해진다. 원본 4K GLB와 웹용 1024px GLB를 함께 수정했고, 웹 URL에는 v14 캐시 버스터를 적용했다.
+
+v15는 크리스탈 제단·포탈 아치·메인 게이트·랜턴탑·나무 3종·야자수·꽃덤불·직선/코너 담장·수로·폭포 절벽·둥근 화단까지 Tripo GLB 14종 전체의 노드 회전을 identity quaternion `[0, 0, 0, 1]`로 통일했다. 따라서 폭포·수로·아치·게이트의 배치 회전은 이제 `scene-placement.json`에 적힌 월드 Y 회전만 반영한다. 식생과 화단에 남은 비정방향 회전은 숨은 GLB 회전이 아니라 장면에서 의도적으로 명시한 인스턴스 회전이다.
