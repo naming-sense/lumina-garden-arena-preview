@@ -1,9 +1,9 @@
 {
-  "validatedAt": "2026-08-18T22:08:00+09:00",
+  "validatedAt": "2026-08-18T22:15:00+09:00",
   "browser": "Google Chrome 144.0.7559.132",
   "renderer": "Three.js r180 WebGL",
   "ready": true,
-  "resourceStatus": "all 13 referenced GLBs, floor texture and placement JSON re-imported locally; public Pages verification pending deployment",
+  "resourceStatus": "all 13 referenced GLBs, floor texture and placement JSON re-imported locally; public v25 page, placement JSON and perimeter-frame GLB verified after Pages deployment",
   "floor": "2048x1152 v10 concept-matched grass",
   "floorMaterialValidation": {
     "generation": "five built-in imagegen grass sources using the original concept as style reference",
@@ -251,13 +251,13 @@
   "publicPreview": {
     "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=25",
     "hosting": "GitHub Pages",
-    "pagesBuildStatus": "pending",
-    "pageHttpStatus": null,
-    "placementHttpStatus": null,
-    "fullWebglLoad": false,
-    "verifiedDesktop": false,
-    "verifiedMobilePortrait": false,
-    "verifiedInstances": null
+    "pagesBuildStatus": "success (run 32141180949)",
+    "pageHttpStatus": 200,
+    "placementHttpStatus": 200,
+    "fullWebglLoad": true,
+    "verifiedDesktop": true,
+    "verifiedMobilePortrait": true,
+    "verifiedInstances": 72
   },
   "blenderReimport": {
     "version": "4.0.2",
