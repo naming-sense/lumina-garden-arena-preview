@@ -10,6 +10,7 @@ const isConstrainedDevice =
   (forcedQuality !== "desktop" &&
     (window.matchMedia("(max-width: 820px)").matches ||
       (navigator.deviceMemory ?? 8) <= 4));
+const isPortraitMobile = isConstrainedDevice && window.innerHeight > window.innerWidth;
 
 const canvas = document.querySelector("#scene");
 const loading = document.querySelector("#loading");
@@ -33,24 +34,35 @@ renderer.shadowMap.enabled = !isConstrainedDevice;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0xbfe9ed, 24, 43);
+scene.fog = new THREE.Fog(
+  0xbfe9ed,
+  isPortraitMobile ? 30 : 24,
+  isPortraitMobile ? 65 : 43,
+);
 
-const camera = new THREE.PerspectiveCamera(31, window.innerWidth / window.innerHeight, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(
+  isPortraitMobile ? 60 : 31,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  100,
+);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.075;
 controls.minDistance = 9;
-controls.maxDistance = 38;
+controls.maxDistance = isPortraitMobile ? 65 : 38;
 controls.maxPolarAngle = Math.PI * 0.48;
 controls.target.set(0, 0.25, -0.2);
 
 const cameraViews = {
   overview: {
-    position: new THREE.Vector3(0, 18.7, 17.2),
+    position: isPortraitMobile
+      ? new THREE.Vector3(0, 27, 26)
+      : new THREE.Vector3(0, 18.7, 17.2),
     target: new THREE.Vector3(0, 0.3, -0.35),
   },
   top: {
-    position: new THREE.Vector3(0, 31, 0.01),
+    position: new THREE.Vector3(0, isPortraitMobile ? 40 : 31, 0.01),
     target: new THREE.Vector3(0, 0, 0),
   },
 };
@@ -340,6 +352,7 @@ async function buildScene() {
     webOptimized: true,
     textureResolution: 1024,
     constrainedDevice: isConstrainedDevice,
+    portraitMobile: isPortraitMobile,
     loadingConcurrency,
     uniqueModels: modelEntries.length,
     instances: placement.instances.length,
