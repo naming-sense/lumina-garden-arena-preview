@@ -89,21 +89,21 @@
     "waterway": 11,
     "waterfallCliff": 2
   },
-  "uniqueTriangles": 170420,
-  "renderedTriangles": 594321,
+  "uniqueTriangles": 162395,
+  "renderedTriangles": 578271,
   "triangleDiagnostics": {
     "metric": "sum of Tripo mesh triangles multiplied by scene instance count",
     "excludes": ["floor", "portal and shrine glow geometry", "contact shadows", "shadow-map pass"],
-    "uniqueToRenderedMultiplier": 3.49,
+    "uniqueToRenderedMultiplier": 3.56,
     "topFourRenderedTriangles": 295338,
-    "topFourSharePercent": 49.7,
+    "topFourSharePercent": 51.1,
     "breakdown": [
       { "asset": "roundedPlanter", "uniqueTriangles": 6789, "instances": 14, "renderedTriangles": 95046, "sharePercent": 16.0 },
       { "asset": "flowerBush", "uniqueTriangles": 4483, "instances": 20, "renderedTriangles": 89660, "sharePercent": 15.1 },
       { "asset": "straightWall", "uniqueTriangles": 1790, "instances": 20, "renderedTriangles": 35800, "sharePercent": 6.0 },
       { "asset": "waterway", "uniqueTriangles": 2230, "instances": 11, "renderedTriangles": 24530, "sharePercent": 4.1 },
       { "asset": "gardenPalm", "uniqueTriangles": 8425, "instances": 6, "renderedTriangles": 50550, "sharePercent": 8.5 },
-      { "asset": "emeraldTree", "uniqueTriangles": 24075, "instances": 2, "renderedTriangles": 48150, "sharePercent": 8.1 },
+      { "asset": "emeraldTree", "uniqueTriangles": 16050, "instances": 2, "renderedTriangles": 32100, "sharePercent": 5.6 },
       { "asset": "pinkTree", "uniqueTriangles": 8409, "instances": 3, "renderedTriangles": 25227, "sharePercent": 4.2 },
       { "asset": "portalArch", "uniqueTriangles": 5657, "instances": 4, "renderedTriangles": 22628, "sharePercent": 3.8 },
       { "asset": "lanternTower", "uniqueTriangles": 5314, "instances": 4, "renderedTriangles": 21256, "sharePercent": 3.6 },
@@ -145,6 +145,15 @@
     "method": "Blender conservative source-preserving reduction (R2)",
     "sourceBackup": "models-web/source-pre-retopo-r6/",
     "tripoRegenerationUsed": false
+  },
+  "retopoR6Integration": {
+    "asset": "emeraldTree",
+    "reason": "approved R6 candidate preserves the original canopy segmentation and leaf texture while reducing the web mesh",
+    "replaced": { "before": 24075, "after": 16050, "instances": 2 },
+    "method": "Blender conservative source-preserving reduction (R6)",
+    "sourceBackup": "models-web/source-pre-retopo-r20/",
+    "tripoRegenerationUsed": false,
+    "localReimport": { "modelValid": true, "placementTransformsPreserved": true }
   },
   "wireframeValidation": {
     "available": true,
@@ -197,7 +206,7 @@
     "mobileVisualCheck": true
   },
   "publicPreview": {
-    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=19",
+    "url": "https://naming-sense.github.io/lumina-garden-arena-preview/demo/?quality=mobile&v=20",
     "hosting": "GitHub Pages",
     "pagesBuildStatus": "pending",
     "pageHttpStatus": null,
@@ -241,7 +250,7 @@
     "models-web/04-garden-portal-arch.glb": "3c183a0885b6e8b7488753eac8865c43f068cdf119a236badc31adba46762a8c",
     "models-web/05-garden-main-gate.glb": "0f62d870864ca744a2db7298671596fba0890992194ffcd0eebcd61dac941b1c",
     "models-web/06-garden-lantern-tower.glb": "7c0b765e26c207384cf9dc211634f6c51bbad7257266689d4b80c0a7475eb2f7",
-    "models-web/07-garden-emerald-canopy-tree.glb": "027310718b22a01ac7061f5e9e9c4afb8d45b418605d7cc0429e972dd34f8abd",
+    "models-web/07-garden-emerald-canopy-tree.glb": "461738d6a6d1224f447a1c6ae674418ffab5472dcafd8885efa38a6f7655f4ca",
     "models-web/08-garden-pink-blossom-tree.glb": "fc075dc966f2b85135121419ffe82c0d74d97fe0b4348442e17528c269f02e08",
     "models-web/09-garden-teal-dome-tree.glb": "c3873567f899fa8b2da7eae103b5431b6279d19858f8698224d86d38e11d43c6",
     "models-web/10-garden-palm.glb": "e3f2629fb3e12217f0daa04c0bea90f0ecd37dca60fd69d3698e66019e6c16e1",
