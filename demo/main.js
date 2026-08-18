@@ -515,7 +515,7 @@ function setRenderMode(mode) {
 
 async function buildScene() {
   const [placement, floorMap] = await Promise.all([
-    fetch("../scene-placement.json?v=17").then((response) => {
+    fetch("../scene-placement.json?v=18").then((response) => {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
