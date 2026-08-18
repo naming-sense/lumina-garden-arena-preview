@@ -28,14 +28,14 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(isConstrainedDevice ? 1 : Math.min(window.devicePixelRatio, 1.6));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.0;
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = 1.16;
 renderer.shadowMap.enabled = !isConstrainedDevice;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(
-  0xbfe9ed,
+  0xd7f5f0,
   isPortraitMobile ? 30 : 24,
   isPortraitMobile ? 65 : 43,
 );
@@ -79,10 +79,13 @@ function setCameraView(name) {
 
 setCameraView(params.get("view") === "top" ? "top" : "overview");
 
-const hemisphere = new THREE.HemisphereLight(0xe8ffff, 0x637950, 1.35);
+const ambient = new THREE.AmbientLight(0xfff7e8, 0.32);
+scene.add(ambient);
+
+const hemisphere = new THREE.HemisphereLight(0xf4fffb, 0x91bd7c, 1.72);
 scene.add(hemisphere);
 
-const keyLight = new THREE.DirectionalLight(0xfff1d6, 2.2);
+const keyLight = new THREE.DirectionalLight(0xffefd2, 2.55);
 keyLight.position.set(-6, 13, 8);
 keyLight.castShadow = !isConstrainedDevice;
 keyLight.shadow.mapSize.set(isConstrainedDevice ? 512 : 2048, isConstrainedDevice ? 512 : 2048);
@@ -92,12 +95,17 @@ keyLight.shadow.camera.top = 9;
 keyLight.shadow.camera.bottom = -9;
 keyLight.shadow.camera.near = 2;
 keyLight.shadow.camera.far = 38;
-keyLight.shadow.bias = -0.00025;
+keyLight.shadow.bias = -0.00018;
+keyLight.shadow.normalBias = 0.022;
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0x8adfff, 0.6);
+const fillLight = new THREE.DirectionalLight(0x9beaff, 0.96);
 fillLight.position.set(7, 7, -8);
 scene.add(fillLight);
+
+const frontFill = new THREE.DirectionalLight(0xffd9bd, 0.48);
+frontFill.position.set(0, 5, 10);
+scene.add(frontFill);
 
 const objectRoot = new THREE.Group();
 objectRoot.name = "garden-arena-instances";
@@ -175,7 +183,12 @@ function prepareTemplate(gltfScene, targetHeight) {
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     for (const material of materials) {
       if (!material) continue;
-      material.envMapIntensity = 0.72;
+      material.envMapIntensity = 0.88;
+      if ((material.isMeshStandardMaterial || material.isMeshPhysicalMaterial) && material.map) {
+        material.emissive.set(0xffffff);
+        material.emissiveMap = material.map;
+        material.emissiveIntensity = 0.1;
+      }
       material.needsUpdate = true;
     }
   });
@@ -303,7 +316,7 @@ async function buildScene() {
       placement.arena.environmentWidth,
       placement.arena.environmentDepth,
     ),
-    new THREE.MeshBasicMaterial({ color: 0x68bdc5, transparent: true, opacity: 0.34 }),
+    new THREE.MeshBasicMaterial({ color: 0x8fd8d3, transparent: true, opacity: 0.42 }),
   );
   underlay.rotation.x = -Math.PI / 2;
   underlay.position.y = -0.055;
@@ -313,6 +326,9 @@ async function buildScene() {
     new THREE.PlaneGeometry(placement.arena.width, placement.arena.depth),
     new THREE.MeshStandardMaterial({
       map: floorMap,
+      emissive: 0xffffff,
+      emissiveMap: floorMap,
+      emissiveIntensity: 0.075,
       roughness: 0.94,
       metalness: 0,
     }),
@@ -351,6 +367,10 @@ async function buildScene() {
     floor: "2048x1152 v8",
     webOptimized: true,
     textureResolution: 1024,
+    lightingPreset: "bright-garden-v1",
+    toneMapping: "Neutral",
+    toneMappingExposure: renderer.toneMappingExposure,
+    texturedMaterialAmbientLift: 0.1,
     constrainedDevice: isConstrainedDevice,
     portraitMobile: isPortraitMobile,
     loadingConcurrency,
