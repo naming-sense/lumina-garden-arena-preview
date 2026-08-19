@@ -155,28 +155,7 @@ const textureLoader = new THREE.TextureLoader(loadingManager);
 const gltfLoader = new GLTFLoader(loadingManager);
 let roundedPlanterAlbedoTexture = null;
 
-function createSoftShadowTexture() {
-  const shadowCanvas = document.createElement("canvas");
-  shadowCanvas.width = 128;
-  shadowCanvas.height = 128;
-  const context = shadowCanvas.getContext("2d");
-  const gradient = context.createRadialGradient(54, 50, 4, 64, 64, 61);
-  gradient.addColorStop(0, "rgba(255, 255, 255, 0.94)");
-  gradient.addColorStop(0.42, "rgba(255, 255, 255, 0.62)");
-  gradient.addColorStop(0.78, "rgba(255, 255, 255, 0.18)");
-  gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, shadowCanvas.width, shadowCanvas.height);
-
-  const texture = new THREE.CanvasTexture(shadowCanvas);
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.generateMipmaps = false;
-  return texture;
-}
-
-const contactShadowTexture = isConstrainedDevice ? createSoftShadowTexture() : null;
-const contactShadowExcludedAssets = new Set(["waterway", "perimeterFrame"]);
+const contactShadowExcludedAssets = new Set(["waterway", "waterfallCliff", "perimeterFrame"]);
 
 async function mapWithConcurrency(items, concurrency, mapper) {
   const results = new Array(items.length);
@@ -323,7 +302,7 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
              float planterDarkMask = 1.0 - smoothstep(0.20, 0.68, planterLuma);
              diffuseColor.rgb *= 1.0 - planterDarkMask * 0.36;
              float planterSideMask = 1.0 - smoothstep(0.22, 0.72, max(vPlanterObjectNormal.y, 0.0));
-             diffuseColor.rgb *= 1.0 - planterSideMask * 0.26;
+             diffuseColor.rgb *= 1.0 - planterSideMask * 0.34;
              float planterGrassMask = smoothstep(0.055, 0.18, diffuseColor.g - diffuseColor.r)
                * smoothstep(-0.045, 0.075, diffuseColor.g - diffuseColor.b);
              diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.47, 0.80, 0.34), planterGrassMask * 0.08);
@@ -345,7 +324,7 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
             diffuseColor.rgb = mix(diffuseColor.rgb, min(diffuseColor.rgb * 1.06 + vec3(0.018, 0.010, 0.018), vec3(1.0)), planterFlowerMask);`,
           );
         };
-        material.customProgramCacheKey = () => "rounded-planter-top-flowers-v4";
+        material.customProgramCacheKey = () => "rounded-planter-top-flowers-v5";
       }
       material.needsUpdate = true;
     }
@@ -452,71 +431,90 @@ function addInstance(instance, config, template) {
 
   const targetRoot = config.category === "environment" ? environmentRoot : coreRoot;
   targetRoot.add(placed);
+  return placed;
 }
 
-function addMobileContactShadows(instances, placement, templates, category, targetRoot) {
-  if (!isConstrainedDevice || !contactShadowTexture) return 0;
+function clipPolygonAtGroundBand(vertices, ceiling) {
+  const clipped = [];
+  for (let index = 0; index < vertices.length; index += 1) {
+    const current = vertices[index];
+    const next = vertices[(index + 1) % vertices.length];
+    const currentInside = current.y <= ceiling;
+    const nextInside = next.y <= ceiling;
+    if (currentInside) clipped.push(current);
+    if (currentInside !== nextInside) {
+      const ratio = (ceiling - current.y) / (next.y - current.y);
+      clipped.push(current.clone().lerp(next, ratio));
+    }
+  }
+  return clipped;
+}
 
-  const shadowInstances = instances.filter(
-    (instance) =>
-      placement.models[instance.asset].category === category &&
-      !contactShadowExcludedAssets.has(instance.asset),
-  );
-  if (shadowInstances.length === 0) return 0;
+function createFootprintContactLine(instance, placed) {
+  if (contactShadowExcludedAssets.has(instance.asset)) return null;
 
-  const shadowGeometry = new THREE.PlaneGeometry(1, 1);
-  const shadowMaterial = new THREE.MeshBasicMaterial({
-    map: contactShadowTexture,
-    color: 0x294b45,
+  placed.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(placed);
+  const size = bounds.getSize(new THREE.Vector3());
+  const center = bounds.getCenter(new THREE.Vector3());
+  const baseY = bounds.min.y;
+  const bandCeiling = baseY + Math.min(Math.max(size.y * 0.14, 0.07), 0.18);
+  const footprintVertices = [];
+  const vertex = new THREE.Vector3();
+
+  placed.traverse((child) => {
+    if (!child.isMesh || !child.geometry || hasTaggedAncestor(child, "effect")) return;
+    const positions = child.geometry.getAttribute("position");
+    if (!positions) return;
+    const index = child.geometry.index;
+    const triangleCount = index ? index.count / 3 : positions.count / 3;
+    for (let triangle = 0; triangle < triangleCount; triangle += 1) {
+      const sourceIndices = [0, 1, 2].map((offset) =>
+        index ? index.getX(triangle * 3 + offset) : triangle * 3 + offset,
+      );
+      const polygon = sourceIndices.map((sourceIndex) =>
+        vertex.fromBufferAttribute(positions, sourceIndex).applyMatrix4(child.matrixWorld).clone(),
+      );
+      const clipped = clipPolygonAtGroundBand(polygon, bandCeiling);
+      for (let fan = 1; fan < clipped.length - 1; fan += 1) {
+        [clipped[0], clipped[fan], clipped[fan + 1]].forEach((point) => {
+          footprintVertices.push(point.x - center.x, 0, point.z - center.z);
+        });
+      }
+    }
+  });
+
+  if (footprintVertices.length === 0) return null;
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(footprintVertices, 3));
+  geometry.computeBoundingSphere();
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x050806,
     transparent: true,
-    opacity: 0.24,
+    opacity: 0.41,
     depthWrite: false,
+    depthTest: true,
     toneMapped: false,
+    side: THREE.DoubleSide,
   });
-  const shadows = new THREE.InstancedMesh(
-    shadowGeometry,
-    shadowMaterial,
-    shadowInstances.length,
-  );
-  shadows.name = `${category}-mobile-contact-shadows`;
-  shadows.renderOrder = -1;
-  shadows.frustumCulled = false;
-  shadows.userData.contactShadow = true;
+  const line = new THREE.Mesh(geometry, material);
+  line.name = `${instance.id}-footprint-contact-line`;
+  line.position.set(center.x, baseY + 0.012, center.z);
+  line.scale.set(1.055, 1, 1.055);
+  line.renderOrder = -1;
+  line.userData.contactShadow = true;
+  return line;
+}
 
-  const groundRotation = new THREE.Quaternion().setFromEuler(
-    new THREE.Euler(-Math.PI / 2, 0, 0),
-  );
-  const yawRotation = new THREE.Quaternion();
-  const combinedRotation = new THREE.Quaternion();
-  const matrix = new THREE.Matrix4();
-  const position = new THREE.Vector3();
-  const scale = new THREE.Vector3();
-
-  shadowInstances.forEach((instance, index) => {
-    const template = templates[instance.asset];
-    const instanceScale = instance.scale ?? 1;
-    const height = template.size[1] * instanceScale;
-    const width = Math.max(template.size[0] * 0.76, 0.3) * instanceScale;
-    const depth = Math.max(template.size[2] * 0.76, 0.3) * instanceScale;
-
-    position.set(
-      instance.position[0] + height * 0.045,
-      0.022,
-      instance.position[2] - height * 0.06,
-    );
-    yawRotation.setFromAxisAngle(
-      new THREE.Vector3(0, 1, 0),
-      THREE.MathUtils.degToRad(instance.rotationY ?? 0),
-    );
-    combinedRotation.copy(yawRotation).multiply(groundRotation);
-    scale.set(width, depth, 1);
-    matrix.compose(position, combinedRotation, scale);
-    shadows.setMatrixAt(index, matrix);
+function addFootprintContactLines(placedInstances) {
+  let count = 0;
+  placedInstances.forEach(({ instance, placed }) => {
+    const line = createFootprintContactLine(instance, placed);
+    if (!line) return;
+    objectRoot.add(line);
+    count += 1;
   });
-
-  shadows.instanceMatrix.needsUpdate = true;
-  targetRoot.add(shadows);
-  return shadowInstances.length;
+  return count;
 }
 
 function setEffectsVisible(visible) {
@@ -636,7 +634,7 @@ async function buildScene() {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
-    textureLoader.loadAsync("../01-floor-only-map.png?v=31"),
+    textureLoader.loadAsync("../01-floor-only-map-v41-clean-crack-nodes-curbs.png?v=1"),
       textureLoader.loadAsync("../models-web/rounded-planter-albedo-matched-light-green-v8-deep-outer-grass-groove.png?v=1"),
   ]);
 
@@ -707,25 +705,11 @@ async function buildScene() {
   );
   const templates = Object.fromEntries(templateEntries);
 
-  for (const instance of placement.instances) {
-    addInstance(instance, placement.models[instance.asset], templates[instance.asset]);
-  }
-
-  const mobileContactShadowInstances =
-    addMobileContactShadows(
-      placement.instances,
-      placement,
-      templates,
-      "core",
-      coreRoot,
-    ) +
-    addMobileContactShadows(
-      placement.instances,
-      placement,
-      templates,
-      "environment",
-      environmentRoot,
-    );
+  const placedInstances = placement.instances.map((instance) => ({
+    instance,
+    placed: addInstance(instance, placement.models[instance.asset], templates[instance.asset]),
+  }));
+  const contactLineShadowInstances = addFootprintContactLines(placedInstances);
 
   const perAssetInstances = placement.instances.reduce((counts, instance) => {
     counts[instance.asset] = (counts[instance.asset] ?? 0) + 1;
@@ -765,10 +749,10 @@ async function buildScene() {
     perimeterWallAmbientLift: 0.28,
     roundedPlanterAmbientLift: 0.13,
     naturalMaterialMaxMetalness: 0.12,
-    shadowMode: isConstrainedDevice ? "static-PCFSoftShadowMap+contact" : "PCFSoftShadowMap",
+    shadowMode: isConstrainedDevice ? "static-PCFSoftShadowMap+contact-lines" : "PCFSoftShadowMap+contact-lines",
     shadowMapSize: isConstrainedDevice ? 1024 : 2048,
     shadowMapAutoUpdate: renderer.shadowMap.autoUpdate,
-    mobileContactShadowInstances,
+    contactLineShadowInstances,
     constrainedDevice: isConstrainedDevice,
     portraitMobile: isPortraitMobile,
     loadingConcurrency,
