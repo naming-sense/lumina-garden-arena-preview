@@ -163,7 +163,7 @@
     { "id": "waterway-west", "asset": "waterway", "position": [-8.48, -0.02, 0], "rotationY": 0, "scale": 0.82 },
     { "id": "waterway-east", "asset": "waterway", "position": [8.48, -0.02, 0], "rotationY": 0, "scale": 0.82 },
 
-    { "id": "waterfall-west", "asset": "waterfallCliff", "position": [-9.3, 0.82, 0], "rotationY": 90, "scale": 0.62 },
-    { "id": "waterfall-east", "asset": "waterfallCliff", "position": [9.3, 0.82, 0], "rotationY": -90, "scale": 0.62 }
+    { "id": "waterfall-west", "asset": "waterfallCliff", "position": [-9.3, 0.82, 0], "rotationY": 0, "scale": 0.62 },
+    { "id": "waterfall-east", "asset": "waterfallCliff", "position": [9.3, 0.82, 0], "rotationY": 180, "scale": 0.62 }
   ]
 }
