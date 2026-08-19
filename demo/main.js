@@ -304,12 +304,26 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
       if (assetKey === "roundedPlanter" && (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial)) {
         if (roundedPlanterAlbedoTexture) material.map = roundedPlanterAlbedoTexture;
         material.onBeforeCompile = (shader) => {
+          shader.vertexShader = shader.vertexShader.replace(
+            "#include <common>",
+            "#include <common>\nvarying vec3 vPlanterObjectNormal;",
+          );
+          shader.vertexShader = shader.vertexShader.replace(
+            "#include <beginnormal_vertex>",
+            "#include <beginnormal_vertex>\nvPlanterObjectNormal = normalize(objectNormal);",
+          );
+          shader.fragmentShader = shader.fragmentShader.replace(
+            "#include <common>",
+            "#include <common>\nvarying vec3 vPlanterObjectNormal;",
+          );
           shader.fragmentShader = shader.fragmentShader.replace(
             "#include <map_fragment>",
             `#include <map_fragment>
              float planterLuma = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
              float planterDarkMask = 1.0 - smoothstep(0.20, 0.68, planterLuma);
              diffuseColor.rgb *= 1.0 - planterDarkMask * 0.36;
+             float planterSideMask = 1.0 - smoothstep(0.22, 0.72, max(vPlanterObjectNormal.y, 0.0));
+             diffuseColor.rgb *= 1.0 - planterSideMask * 0.26;
              float planterGrassMask = smoothstep(0.055, 0.18, diffuseColor.g - diffuseColor.r)
                * smoothstep(-0.045, 0.075, diffuseColor.g - diffuseColor.b);
              diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.47, 0.80, 0.34), planterGrassMask * 0.08);
@@ -331,7 +345,7 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
             diffuseColor.rgb = mix(diffuseColor.rgb, min(diffuseColor.rgb * 1.06 + vec3(0.018, 0.010, 0.018), vec3(1.0)), planterFlowerMask);`,
           );
         };
-        material.customProgramCacheKey = () => "rounded-planter-top-flowers-v3";
+        material.customProgramCacheKey = () => "rounded-planter-top-flowers-v4";
       }
       material.needsUpdate = true;
     }
@@ -623,7 +637,7 @@ async function buildScene() {
       return response.json();
     }),
     textureLoader.loadAsync("../01-floor-only-map.png?v=31"),
-      textureLoader.loadAsync("../models-web/rounded-planter-albedo-matched-light-green-v5.png?v=1"),
+      textureLoader.loadAsync("../models-web/rounded-planter-albedo-matched-light-green-v8-deep-outer-grass-groove.png?v=1"),
   ]);
 
   floorMap.colorSpace = THREE.SRGBColorSpace;
