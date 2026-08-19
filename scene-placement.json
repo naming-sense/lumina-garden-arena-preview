@@ -87,7 +87,7 @@
     }
   },
   "instances": [
-    { "id": "crystal-center", "asset": "crystalShrine", "position": [0, 0, 0], "rotationY": 0 },
+    { "id": "crystal-center", "asset": "crystalShrine", "position": [0, 0, -0.34], "rotationY": 0 },
     { "id": "portal-left-north", "asset": "portalArch", "team": "cyan", "position": [-7.05, 0, -1.16], "rotationY": 0 },
     { "id": "portal-left-south", "asset": "portalArch", "team": "cyan", "position": [-7.05, 0, 1.02], "rotationY": 0 },
     { "id": "portal-right-north", "asset": "portalArch", "team": "purple", "position": [7.05, 0, -1.16], "rotationY": 180 },

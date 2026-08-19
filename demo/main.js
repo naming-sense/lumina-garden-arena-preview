@@ -142,6 +142,7 @@ const environmentRoot = new THREE.Group();
 environmentRoot.name = "environment-object-instances";
 objectRoot.add(environmentRoot);
 
+
 const loadingManager = new THREE.LoadingManager();
 let displayedProgress = 0;
 loadingManager.onProgress = (_url, loaded, total) => {
@@ -152,6 +153,7 @@ loadingManager.onProgress = (_url, loaded, total) => {
 
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const gltfLoader = new GLTFLoader(loadingManager);
+let roundedPlanterAlbedoTexture = null;
 
 function createSoftShadowTexture() {
   const shadowCanvas = document.createElement("canvas");
@@ -299,6 +301,38 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
         material.emissiveMap = null;
         material.emissiveIntensity = 0;
       }
+      if (assetKey === "roundedPlanter" && (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial)) {
+        if (roundedPlanterAlbedoTexture) material.map = roundedPlanterAlbedoTexture;
+        material.onBeforeCompile = (shader) => {
+          shader.fragmentShader = shader.fragmentShader.replace(
+            "#include <map_fragment>",
+            `#include <map_fragment>
+             float planterLuma = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+             float planterDarkMask = 1.0 - smoothstep(0.20, 0.68, planterLuma);
+             diffuseColor.rgb *= 1.0 - planterDarkMask * 0.36;
+             float planterGrassMask = smoothstep(0.055, 0.18, diffuseColor.g - diffuseColor.r)
+               * smoothstep(-0.045, 0.075, diffuseColor.g - diffuseColor.b);
+             diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.47, 0.80, 0.34), planterGrassMask * 0.08);
+             vec3 planterCenterSample = texture2D(map, vMapUv).rgb;
+             float planterSampleMax = max(max(planterCenterSample.r, planterCenterSample.g), planterCenterSample.b);
+             float planterSampleMin = min(min(planterCenterSample.r, planterCenterSample.g), planterCenterSample.b);
+             float planterNonGreen = 1.0 - smoothstep(0.035, 0.16, planterCenterSample.g - max(planterCenterSample.r, planterCenterSample.b));
+             float planterFlowerMask = smoothstep(0.18, 0.42, planterSampleMax - planterSampleMin)
+               * smoothstep(0.14, 0.45, planterSampleMax)
+               * planterNonGreen;
+             vec3 planterNeighborAverage = (
+               texture2D(map, vMapUv + vec2(0.00125, 0.0)).rgb +
+               texture2D(map, vMapUv - vec2(0.00125, 0.0)).rgb +
+               texture2D(map, vMapUv + vec2(0.0, 0.00125)).rgb +
+               texture2D(map, vMapUv - vec2(0.0, 0.00125)).rgb
+             ) * 0.25;
+             vec3 planterFineDetail = clamp(planterCenterSample - planterNeighborAverage, vec3(-0.12), vec3(0.12));
+             diffuseColor.rgb += planterFineDetail * planterGrassMask * 0.52;
+            diffuseColor.rgb = mix(diffuseColor.rgb, min(diffuseColor.rgb * 1.06 + vec3(0.018, 0.010, 0.018), vec3(1.0)), planterFlowerMask);`,
+          );
+        };
+        material.customProgramCacheKey = () => "rounded-planter-top-flowers-v3";
+      }
       material.needsUpdate = true;
     }
   });
@@ -385,6 +419,10 @@ function addInstance(instance, config, template) {
     placed.scale.multiply(new THREE.Vector3().fromArray(instance.scale));
   } else {
     placed.scale.multiplyScalar(instance.scale ?? 1);
+  }
+  if (instance.asset === "roundedPlanter") {
+    // Keep the original height; narrow the horizontal footprint another 5%.
+    placed.scale.multiply(new THREE.Vector3(0.81225, 1.0, 1.06));
   }
   placed.userData.asset = instance.asset;
   placed.userData.team = instance.team ?? null;
@@ -579,12 +617,13 @@ function setRenderMode(mode) {
 }
 
 async function buildScene() {
-  const [placement, floorMap] = await Promise.all([
-    fetch("../scene-placement.json?v=30").then((response) => {
+  const [placement, floorMap, planterTopMap] = await Promise.all([
+    fetch("../scene-placement.json?v=31").then((response) => {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
     textureLoader.loadAsync("../01-floor-only-map.png?v=31"),
+      textureLoader.loadAsync("../models-web/rounded-planter-albedo-matched-light-green-v5.png?v=1"),
   ]);
 
   floorMap.colorSpace = THREE.SRGBColorSpace;
@@ -594,6 +633,15 @@ async function buildScene() {
   );
   floorMap.minFilter = THREE.LinearMipmapLinearFilter;
   floorMap.magFilter = THREE.LinearFilter;
+  planterTopMap.colorSpace = THREE.SRGBColorSpace;
+  // glTF base-color images use UV origin at the lower edge. Preserve that
+  // orientation when replacing the embedded planter map.
+  planterTopMap.flipY = false;
+  planterTopMap.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+  planterTopMap.minFilter = THREE.LinearMipmapLinearFilter;
+  planterTopMap.magFilter = THREE.LinearFilter;
+  planterTopMap.needsUpdate = true;
+  roundedPlanterAlbedoTexture = planterTopMap;
 
   underlay = new THREE.Mesh(
     new THREE.PlaneGeometry(
