@@ -41,7 +41,7 @@ renderer.toneMapping = THREE.NeutralToneMapping;
 // Bright pastel daylight, derived from the concept palette. Keep the lift in
 // the render rig (rather than turning every asset emissive or applying a
 // blanket tint) so painted texture detail remains readable.
-const shadedExposure = 1.38;
+const shadedExposure = 0.99;
 renderer.toneMappingExposure = shadedExposure;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -52,9 +52,9 @@ const scene = new THREE.Scene();
 // Warm daylight, a pale mint sky fill and neutral front fill raise dark GLB
 // textures without a global hue filter or albedo-as-emissive override.
 const shadedFog = new THREE.Fog(
-  0xe2f7f1,
-  isPortraitMobile ? 39 : 31,
-  isPortraitMobile ? 74 : 53,
+  0xd4f2ef,
+  isPortraitMobile ? 34 : 27,
+  isPortraitMobile ? 68 : 47,
 );
 scene.fog = shadedFog;
 
@@ -102,13 +102,13 @@ function setCameraView(name) {
 
 setCameraView(params.get("view") === "top" ? "top" : "overview");
 
-const ambient = new THREE.AmbientLight(0xfffbf0, 0.58);
+const ambient = new THREE.AmbientLight(0xfff7e7, 0.40);
 scene.add(ambient);
 
-const hemisphere = new THREE.HemisphereLight(0xe1fbf6, 0xb9dca7, 1.86);
+const hemisphere = new THREE.HemisphereLight(0xd2f8f3, 0x90c982, 1.52);
 scene.add(hemisphere);
 
-const keyLight = new THREE.DirectionalLight(0xfff1d9, 3.05);
+const keyLight = new THREE.DirectionalLight(0xffebca, 2.55);
 keyLight.position.set(-6, 13, 8);
 keyLight.castShadow = true;
 keyLight.shadow.mapSize.set(isConstrainedDevice ? 1024 : 2048, isConstrainedDevice ? 1024 : 2048);
@@ -120,14 +120,13 @@ keyLight.shadow.camera.near = 2;
 keyLight.shadow.camera.far = 38;
 keyLight.shadow.bias = -0.00018;
 keyLight.shadow.normalBias = 0.022;
-keyLight.shadow.intensity = 0.68;
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0xd8faf4, 1.16);
+const fillLight = new THREE.DirectionalLight(0xc4f3f1, 0.82);
 fillLight.position.set(7, 7, -8);
 scene.add(fillLight);
 
-const frontFill = new THREE.DirectionalLight(0xfff8ed, 0.62);
+const frontFill = new THREE.DirectionalLight(0xffefdc, 0.32);
 frontFill.position.set(0, 5, 10);
 scene.add(frontFill);
 
@@ -585,7 +584,7 @@ async function buildScene() {
       if (!response.ok) throw new Error(`placement HTTP ${response.status}`);
       return response.json();
     }),
-    textureLoader.loadAsync("../01-floor-only-map.png?v=10"),
+    textureLoader.loadAsync("../01-floor-only-map.png?v=31"),
   ]);
 
   floorMap.colorSpace = THREE.SRGBColorSpace;
@@ -614,7 +613,7 @@ async function buildScene() {
   });
   // The original grass carries enough local colour already. A modest
   // desaturation keeps the brightened scene pastel rather than neon green.
-  const floorSaturation = 0.88;
+  const floorSaturation = 0.96;
   floorShadedMaterial.onBeforeCompile = (shader) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <color_fragment>",
