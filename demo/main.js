@@ -280,6 +280,34 @@ function prepareTemplate(gltfScene, targetHeight, assetKey) {
         material.emissiveMap = null;
         material.emissiveIntensity = 0;
       }
+      if (assetKey === "crystalShrine" && (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial)) {
+        // The shrine is a single textured mesh. Keep the pedestal's painted
+        // material readable and add cyan emission only above the base.
+        material.emissive.set(0x000000);
+        material.emissiveIntensity = 0;
+        material.roughness = Math.min(material.roughness, 0.46);
+        material.onBeforeCompile = (shader) => {
+          shader.vertexShader = shader.vertexShader.replace(
+            "#include <common>",
+            "#include <common>\nvarying float vCrystalWorldHeight;",
+          );
+          shader.vertexShader = shader.vertexShader.replace(
+            "#include <begin_vertex>",
+            "#include <begin_vertex>\nvCrystalWorldHeight = (modelMatrix * vec4(transformed, 1.0)).y;",
+          );
+          shader.fragmentShader = shader.fragmentShader.replace(
+            "#include <common>",
+            "#include <common>\nvarying float vCrystalWorldHeight;",
+          );
+          shader.fragmentShader = shader.fragmentShader.replace(
+            "#include <emissivemap_fragment>",
+            `#include <emissivemap_fragment>
+             float crystalEmissionMask = smoothstep(0.34, 0.70, vCrystalWorldHeight);
+             totalEmissiveRadiance += vec3(0.025, 0.40, 0.74) * crystalEmissionMask;`,
+          );
+        };
+        material.customProgramCacheKey = () => "crystal-upper-emission-v1";
+      }
       if (assetKey === "roundedPlanter" && (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial)) {
         if (roundedPlanterAlbedoTexture) material.map = roundedPlanterAlbedoTexture;
         material.onBeforeCompile = (shader) => {
@@ -397,7 +425,7 @@ function createCrystalGlow(targetHeight) {
   ring.position.y = 0.045;
   effect.add(ring);
 
-  const light = new THREE.PointLight(0x37edff, 4.2, 4.4, 2);
+  const light = new THREE.PointLight(0x37edff, 4.9, 4.6, 2);
   light.position.y = targetHeight * 0.68;
   effect.add(light);
   return effect;
